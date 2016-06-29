@@ -1,0 +1,8 @@
+
+virtual_mailbox_base = /var/virtual/spool
+virtual_mailbox_maps = hash:/etc/postfix/vmailbox
+virtual_mailbox_domains = hash:/etc/postfix/vmaildomains
+virtual_uid_maps = static:101
+virtual_gid_maps = static:102
+virtual_mailbox_lock = dotlock
+virtual_minimum_uid = 102
