@@ -31,18 +31,16 @@ RUN chmod 0400 /etc/ssl/private/ssl-cert-snakeoil.key
 
 ADD mkvirtual.sh /mkvirtual.sh
 RUN chmod +x /mkvirtual.sh && \
-    touch /var/log/maillog && \
     mkdir -p /var/stunnel && \
-    touch /var/stunnel/stunnel.log && \
-    mkdir -p /virtual && \
     mkdir -p /var/spool/virtual && \
+    mkdir -p /virtual && \
     /mkvirtual.sh
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh && \
     touch /tail.target
 
-RUN echo 0.3
+RUN echo 0.4
 
 VOLUME /virtual
 
