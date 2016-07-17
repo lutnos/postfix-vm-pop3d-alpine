@@ -21,43 +21,40 @@ docker build postfix-vm-pop3d-alpine
 For some image ID 0123abc
 ```
 docker images
-docker tag 0123abc postfix-vm-pop3d:latest
+docker tag 0123abc postfix-vm-pop3d-alpine:latest
 ```
 
 ## Start container
 
 ```
-docker run --name postfix-vm-pop3d -d -P -v postfix-vm-pop3d:/virtual postfix-vm-pop3d-alpine
+docker run --name postfix-vm-pop3d -d -p 25:25 -p 110:110 -p 465:465 -p 995:995 -v postfix-vm-pop3d-data:/data postfix-vm-pop3d-alpine
 ```
 
 ## Configure users
 
+This example configures me@mydomain.com and another@mydomain.com .  The me@mydomain.com mailbox will also
+receive any other mail fpor mydomain.com not exp[licitly configured.
+
 ./demo.sh from the host will do this, just enter a pw1 and a pw2 .
 
 ```
-docker exec postfix-vm-pop3d mkdir -p /var/spool/virtual/mydomain.com
-docker exec postfix-vm-pop3d chown vmail:postdrop /var/spool/virtual/mydomain.com
-docker exec postfix-vm-pop3d chmod 0775 /var/spool/virtual/mydomain.com
+docker exec -u vmail postfix-vm-pop3d mkdir -p /data/var/spool/virtual/mydomain.com
+echo mydomain.com placeholder |docker exec -i postfix-vm-pop3d sh -c 'cat - > /data/etc/postfix/vmaildomains'
+docker exec -t postfix-vm-pop3d postmap /data/etc/postfix/vmaildomains
 
-echo mydomain.com placeholder |docker exec -i postfix-vm-pop3d sh -c 'cat - > /etc/postfix/vmaildomains'
-docker exec -t postfix-vm-pop3d postmap /etc/postfix/vmaildomains
+echo another@mydomain.com mydomain.com/another |docker exec -i postfix-vm-pop3d sh -c 'cat - >/data/etc/postfix/vmailbox'
+echo @mydomain.com mydomain.com/me |docker exec -i postfix-vm-pop3d sh -c 'cat - >>/data/etc/postfix/vmailbox'
+docker exec -u vmail postfix-vm-pop3d touch /data/var/spool/virtual/mydomain.com/me
 
-echo another@mydomain.com mydomain.com/another |docker exec -i postfix-vm-pop3d sh -c 'cat - >/etc/postfix/vmailbox'
-echo @mydomain.com mydomain.com/me |docker exec -i postfix-vm-pop3d sh -c 'cat - >>/etc/postfix/vmailbox'
-docker exec -t postfix-vm-pop3d postmap /etc/postfix/vmailbox
-
-docker exec postfix-vm-pop3d mkdir -p /etc/virtual/mydomain.com
-docker exec -it postfix-vm-pop3d htpasswd -c -d /etc/virtual/mydomain.com/passwd me
-docker exec -it postfix-vm-pop3d htpasswd -d /etc/virtual/mydomain.com/passwd another
+docker exec postfix-vm-pop3d mkdir -p /data/etc/virtual/mydomain.com
+docker exec -it postfix-vm-pop3d htpasswd -c -B /data/etc/virtual/mydomain.com/passwd me
+docker exec -it postfix-vm-pop3d htpasswd -B /data/etc/virtual/mydomain.com/passwd another
 ```
 
 ## Test
 
-For some post mapped port 25 say 32789 and some mapped port 110, say 32788
-
 ```
-docker ps
-ncat 127.0.0.1 32789
+ncat 127.0.0.1 25
 ehlo test.com
 mail from: test@test.com
 rcpt to: another@mydomain.com
@@ -66,8 +63,10 @@ Subject: Test
 
 test
 .
+quit
 ^C
-ncat 127.0.0.1 32788
+
+ncat 127.0.0.1 110
 user another
 pass pw1
 stat
@@ -75,4 +74,21 @@ retr 1
 dele 1
 quit
 ^C
+
+openssl s_client -connect 127.0.0.1:995
+user me@mydomain.com
+pass pw1
+quit
+
+openssl s_client -connect 127.0.0.1:465
+ehlo test.com
+mail from: test@test.com
+rcpt to: another@mydomain.com
+data
+Subject: Test
+
+test
+.
+quit
+
 ```

@@ -1,11 +1,11 @@
-docker exec postfix-vm-pop3d mkdir -p /var/spool/virtual/mydomain.com
-docker exec postfix-vm-pop3d chown vmail:postdrop /var/spool/virtual/mydomain.com
-docker exec postfix-vm-pop3d chmod 0775 /var/spool/virtual/mydomain.com
-echo mydomain.com placeholder |docker exec -i postfix-vm-pop3d sh -c 'cat - > /etc/postfix/vmaildomains'
-docker exec -t postfix-vm-pop3d postmap /etc/postfix/vmaildomains
-echo another@mydomain.com mydomain.com/another |docker exec -i postfix-vm-pop3d sh -c 'cat - >/etc/postfix/vmailbox'
-echo @mydomain.com mydomain.com/me |docker exec -i postfix-vm-pop3d sh -c 'cat - >>/etc/postfix/vmailbox'
-docker exec -t postfix-vm-pop3d postmap /etc/postfix/vmailbox
-docker exec postfix-vm-pop3d mkdir -p /etc/virtual/mydomain.com
-docker exec -it postfix-vm-pop3d htpasswd -c -d /etc/virtual/mydomain.com/passwd me
-docker exec -it postfix-vm-pop3d htpasswd -d /etc/virtual/mydomain.com/passwd another
+docker exec -u vmail postfix-vm-pop3d mkdir -p /data/var/spool/virtual/mydomain.com
+echo mydomain.com placeholder |docker exec -i postfix-vm-pop3d sh -c 'cat - > /data/etc/postfix/vmaildomains'
+docker exec -t postfix-vm-pop3d postmap /data/etc/postfix/vmaildomains
+
+echo another@mydomain.com mydomain.com/another |docker exec -i postfix-vm-pop3d sh -c 'cat - >/data/etc/postfix/vmailbox'
+echo @mydomain.com mydomain.com/me |docker exec -i postfix-vm-pop3d sh -c 'cat - >>/data/etc/postfix/vmailbox'
+docker exec -t postfix-vm-pop3d postmap /data/etc/postfix/vmailbox
+
+docker exec postfix-vm-pop3d mkdir -p /data/etc/virtual/mydomain.com
+docker exec -it postfix-vm-pop3d htpasswd -c -B /data/etc/virtual/mydomain.com/passwd me
+docker exec -it postfix-vm-pop3d htpasswd -B /data/etc/virtual/mydomain.com/passwd another
