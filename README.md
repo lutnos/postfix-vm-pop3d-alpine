@@ -44,7 +44,7 @@ docker exec -t postfix-vm-pop3d postmap /data/etc/postfix/vmaildomains
 
 echo another@mydomain.com mydomain.com/another |docker exec -i postfix-vm-pop3d sh -c 'cat - >/data/etc/postfix/vmailbox'
 echo @mydomain.com mydomain.com/me |docker exec -i postfix-vm-pop3d sh -c 'cat - >>/data/etc/postfix/vmailbox'
-docker exec -u vmail postfix-vm-pop3d touch /data/var/spool/virtual/mydomain.com/me
+docker exec -t postfix-vm-pop3d postmap /data/etc/postfix/vmailbox
 
 docker exec postfix-vm-pop3d mkdir -p /data/etc/virtual/mydomain.com
 docker exec -it postfix-vm-pop3d htpasswd -c -B /data/etc/virtual/mydomain.com/passwd me
