@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  smtp:
+    build: postfix
+    image: v-postfix-alpine:0.8
+    volumes:
+      - postfix-vm-pop3d-data:/data
+    ports:
+      - "25:25"
+      - "465:465"
+  pop3:
+    build: vmpop3d
+    image: vmpop3d-alpine:0.8
+    volumes:
+      - postfix-vm-pop3d-data:/data
+    ports:
+      - "110:110"
+  stunnel:
+    build: stunnel
+    image: stunnel-alpine:0.8
+    volumes:
+      - postfix-vm-pop3d-data:/data
+    ports:
+      - "995:995"
+    links:
+      - pop3
+
+volumes:
+  postfix-vm-pop3d-data:
+

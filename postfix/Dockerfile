@@ -13,26 +13,6 @@ RUN addgroup -g 600 postfix && \
 RUN apk update && \
     apk add postfix rsyslog apache2-utils openssl
 
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
-RUN apk update && \
-    apk add stunnel
-
-RUN apk add wget gcc libc-dev make && \
-    wget http://www.ibiblio.org/pub/Linux/system/mail/pop/vm-pop3d-1.1.6.tar.gz && \
-    tar xzvf vm-pop3d-1.1.6.tar.gz && \
-    cd vm-pop3d-1.1.6 && \
-    ./configure --enable-virtual --prefix=/usr && \
-    echo '#undef VIRTUAL_MAILPATH' >> vm-pop3d.h && \
-    echo '#undef VIRTUAL_PASSWORDS_PATH' >>vm-pop3d.h && \
-    echo '#define VIRTUAL_MAILPATH "/data/var/spool/virtual"' >> vm-pop3d.h && \
-    echo '#define VIRTUAL_PASSWORDS_PATH "/data/etc/virtual"' >> vm-pop3d.h && \
-    make install && \
-    cd .. && \
-    rm -rf vm-pop3d-1.1.6 && \
-    rm vm-pop3d-1.1.6.tar.gz && \
-    apk del --purge make libc-dev gcc wget && \
-    rm /var/cache/apk/*
-
 RUN echo virtual_mailbox_base = /data/var/spool/virtual >> /etc/postfix/main.cf && \
     echo virtual_mailbox_maps = hash:/data/etc/postfix/vmailbox >> /etc/postfix/main.cf && \
     echo virtual_mailbox_domains = hash:/data/etc/postfix/vmaildomains >> /etc/postfix/main.cf && \
@@ -49,7 +29,6 @@ RUN echo virtual_mailbox_base = /data/var/spool/virtual >> /etc/postfix/main.cf 
     echo "  -o smtpd_tls_wrappermode=yes" >> /etc/postfix/master.cf && \
     echo "  -o smtpd_reject_unlisted_recipient=no" >> /etc/postfix/master.cf
 
-ADD stunnel.conf /etc/stunnel/stunnel.conf
 ADD ssl-cert-snakeoil.pem /etc/ssl/certs/ssl-cert-snakeoil.pem
 ADD ssl-cert-snakeoil.key /etc/ssl/private/ssl-cert-snakeoil.key
 RUN chmod 0400 /etc/ssl/private/ssl-cert-snakeoil.key
@@ -61,18 +40,15 @@ RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
 RUN ls -lR /data && \
     mkdir -p /data/etc/virtual && \
     mkdir -p /data/etc/postfix && \
-    mkdir -p /data/var/log && \
-    mkdir -p /data/var/stunnel && \
-    touch /data/var/log/stunnel.log && \
-    ln -v /data/var/log/stunnel.log /data/var/stunnel/stunnel.log
+    mkdir -p /data/var/log
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
 
-RUN echo 0.7
+RUN echo 0.8
 
 VOLUME /data
 
-EXPOSE 25 110 465 995
+EXPOSE 25 465
 
 ENTRYPOINT ["/entry.sh"]
