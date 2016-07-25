@@ -37,8 +37,7 @@ RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
            -e 's/\/var\/log\/maillog/\/data\/var\/log\/maillog/' \
            /etc/rsyslog.conf
 
-RUN ls -lR /data && \
-    mkdir -p /data/etc/virtual && \
+RUN mkdir -p /data/etc/virtual && \
     mkdir -p /data/etc/postfix && \
     mkdir -p /data/var/log
 

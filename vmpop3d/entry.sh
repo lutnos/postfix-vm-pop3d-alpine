@@ -6,4 +6,5 @@ rm /var/run/rsyslogd.pid
 
 vm-pop3d -d --user vmail
 
-tail -f /data/var/log/pop3log
+touch /var/log/maillog
+tail -f /var/log/maillog

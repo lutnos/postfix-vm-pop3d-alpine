@@ -3,7 +3,7 @@ version: '2'
 services:
   smtp:
     build: postfix
-    image: v-postfix-alpine:0.8
+    image: vmail-postfix-alpine:0.8
     volumes:
       - postfix-vm-pop3d-data:/data
     ports:
@@ -18,9 +18,7 @@ services:
       - "110:110"
   stunnel:
     build: stunnel
-    image: stunnel-alpine:0.8
-    volumes:
-      - postfix-vm-pop3d-data:/data
+    image: pop3s-stunnel-alpine:0.8
     ports:
       - "995:995"
     links:
