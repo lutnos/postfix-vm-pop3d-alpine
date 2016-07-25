@@ -31,12 +31,9 @@ RUN apk update && \
     rm /var/cache/apk/*
 
 RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
-           -e 's/\/var\/log\/maillog/\/data\/var\/log\/pop3log/' \
            /etc/rsyslog.conf
 
-RUN ls -lR /data && \
-    mkdir -p /data/etc/virtual&& \
-    mkdir -p /data/var/log
+RUN mkdir -p /data/etc/virtual
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh

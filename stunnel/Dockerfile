@@ -14,17 +14,12 @@ ADD ssl-cert-snakeoil.pem /etc/ssl/certs/ssl-cert-snakeoil.pem
 ADD ssl-cert-snakeoil.key /etc/ssl/private/ssl-cert-snakeoil.key
 RUN chmod 0400 /etc/ssl/private/ssl-cert-snakeoil.key
 
-RUN mkdir -p /data/var/log && \
-    mkdir -p /data/var/stunnel && \
-    touch /data/var/log/stunnel.log && \
-    ln -v /data/var/log/stunnel.log /data/var/stunnel/stunnel.log
+RUN mkdir -p /var/stunnel
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
 
 RUN echo 0.8
-
-VOLUME /data
 
 EXPOSE 995
 

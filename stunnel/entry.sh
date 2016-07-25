@@ -2,4 +2,4 @@
 
 stunnel
 
-tail -f /data/var/log/stunnel.log
+tail -f /var/stunnel/stunnel.log
