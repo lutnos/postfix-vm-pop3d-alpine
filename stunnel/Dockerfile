@@ -19,7 +19,7 @@ RUN mkdir -p /var/stunnel
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
 
-RUN echo 0.8
+RUN echo 0.9
 
 EXPOSE 995
 

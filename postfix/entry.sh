@@ -1,9 +1,8 @@
 #!/bin/sh
 
-touch /var/run/rsyslogd.pid
-rm /var/run/rsyslogd.pid
+if [ -f /var/run/rsyslogd.pid ]; then rm /var/run/rsyslogd.pid; fi
 /usr/sbin/rsyslogd -n &
 
 postfix start
 
-tail -f /data/var/log/maillog
+tail -f /var/log/maillog

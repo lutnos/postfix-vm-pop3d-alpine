@@ -2,16 +2,13 @@ FROM alpine:3.4
 
 MAINTAINER Dave English <dave@lutnos.com>
 
-RUN addgroup -g 600 postfix && \
-    mkdir -p /var/spool/postfix && \
-    adduser -D -u 500 -G postfix -g postfix -h /var/spool/postfix -s /bin/false postfix && \
-    addgroup -g 601 postdrop && \
-    mkdir -p /data/var/spool/virtual && \
-    adduser -D -u 501 -G postdrop -g vmail -h /data/var/spool/virtual -s /sbin/nologin vmail && \
-    chown vmail:postdrop /data/var/spool/virtual
+RUN addgroup -g 600 postdrop && \
+    mkdir -p /var/spool/virtual && \
+    adduser -D -u 500 -G postdrop -g vmail -h /var/spool/virtual -s /sbin/nologin vmail && \
+    chown vmail:postdrop /var/spool/virtual
 
 RUN apk update && \
-    apk add rsyslog
+    apk add apache2-utils rsyslog
 
 RUN apk update && \
     apk add wget gcc libc-dev make && \
@@ -19,10 +16,6 @@ RUN apk update && \
     tar xzvf vm-pop3d-1.1.6.tar.gz && \
     cd vm-pop3d-1.1.6 && \
     ./configure --enable-virtual --prefix=/usr && \
-    echo '#undef VIRTUAL_MAILPATH' >> vm-pop3d.h && \
-    echo '#undef VIRTUAL_PASSWORDS_PATH' >>vm-pop3d.h && \
-    echo '#define VIRTUAL_MAILPATH "/data/var/spool/virtual"' >> vm-pop3d.h && \
-    echo '#define VIRTUAL_PASSWORDS_PATH "/data/etc/virtual"' >> vm-pop3d.h && \
     make install && \
     cd .. && \
     rm -rf vm-pop3d-1.1.6 && \
@@ -31,16 +24,16 @@ RUN apk update && \
     rm /var/cache/apk/*
 
 RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
-           /etc/rsyslog.conf
-
-RUN mkdir -p /data/etc/virtual
+           /etc/rsyslog.conf && \
+    touch /var/log/maillog
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
 
-RUN echo 0.8
+RUN echo 0.9
 
-VOLUME /data
+VOLUME /var/spool/virtual
+VOLUME /etc/virtual
 
 EXPOSE 110
 
