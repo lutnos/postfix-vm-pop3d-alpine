@@ -10,24 +10,10 @@ Click `File` -> `Open Docker Command Linke Terminal`
 
 Kitematic offers a GUI interface for docker
 
-## Build image
-
-```
-docker build postfix-vm-pop3d-alpine
-```
-
-## Tag images
-
-For some image ID 0123abc
-```
-docker images
-docker tag 0123abc postfix-vm-pop3d-alpine:latest
-```
-
 ## Start container
 
 ```
-docker run --name postfix-vm-pop3d -d -p 25:25 -p 110:110 -p 465:465 -p 995:995 -v postfix-vm-pop3d-data:/data postfix-vm-pop3d-alpine
+docker compose up
 ```
 
 ## Configure users
