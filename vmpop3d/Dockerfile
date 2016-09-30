@@ -30,7 +30,7 @@ RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
 
-RUN echo 0.9
+RUN echo 1.1
 
 VOLUME /var/spool/virtual
 VOLUME /etc/virtual

@@ -3,16 +3,26 @@ version: '2'
 services:
   smtp:
     build: postfix
-    image: vmail-postfix-alpine:0.9
+    image: vmail-postfix-postfix:1.1
     volumes:
       - postfix-vm-pop3d-etc:/etc/virtual
       - postfix-vm-pop3d-spool:/var/spool/virtual
     ports:
       - "25:25"
       - "465:465"
+  spamassassin:
+    build: spamassassin
+    image: vmail-postfix-spamassassin:1.1
+    ports:
+      - "783:783"
+  postgrey:
+    build: postgrey
+    image: vmail-postfix-postgrey:1.1
+    ports:
+      - "10023:10023"
   pop3:
     build: vmpop3d
-    image: vmpop3d-alpine:0.9
+    image: vmpop3d-alpine:1.1
     volumes:
       - postfix-vm-pop3d-etc:/etc/virtual
       - postfix-vm-pop3d-spool:/var/spool/virtual
@@ -20,7 +30,7 @@ services:
       - "110:110"
   stunnel:
     build: stunnel
-    image: pop3s-stunnel-alpine:0.9
+    image: pop3s-stunnel-alpine:1.1
     ports:
       - "995:995"
     links:
