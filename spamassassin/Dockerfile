@@ -7,14 +7,18 @@ RUN apk update && \
 
 RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
            /etc/rsyslog.conf && \
-    touch /var/log/maillog
+    touch /var/log/maillog && \
+    mkdir -p /etc/rsyslog.d
+RUN echo '$IncludeConfig /etc/rsyslog.d/*.conf' >> /etc/rsyslog.conf
 
 RUN mkdir -p /etc/virtual
 
-COPY spamassassin /etc/spamassassin
+COPY etc /etc/spamassassin
+COPY share /usr/share/spamassassin
 ADD supervisord.ini /etc/supervisord.d/supervisord.ini
 
-RUN /usr/bin/sa-update
+RUN adduser -D -u 701 spamd
+RUN /usr/bin/sa-update -v
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh

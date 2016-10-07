@@ -280,7 +280,7 @@ unknown_local_recipient_reject_code = 550
 #mynetworks = 168.100.189.0/28, 127.0.0.0/8
 #mynetworks = $config_directory/mynetworks
 #mynetworks = hash:/etc/postfix/network_table
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.17.0.2/16
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.16.0.0/12
 
 # The relay_domains parameter restricts what destinations this system will
 # relay mail to.  See the smtpd_recipient_restrictions description in
@@ -571,7 +571,10 @@ recipient_delimiter = +
 #
 #smtpd_banner = $myhostname ESMTP $mail_name
 #smtpd_banner = $myhostname ESMTP $mail_name ($mail_version)
-smtpd_banner = $myhostname ESMTP $mail_name (Alpine)
+smtpd_banner = $myorigin ESMTP $mail_name (Alpine)
+
+# This service sends "new mail" notifications to users who have
+# requested new mail notification with the UNIX command "biff y"
 biff = no
 
 append_dot_mydomain = no
@@ -694,6 +697,7 @@ virtual_uid_maps = static:500
 virtual_gid_maps = static:600
 virtual_mailbox_lock = dotlock
 virtual_minimum_uid = 500
+virtual_mailbox_limit = 0
 
 smtputf8_enable = no
 
@@ -710,17 +714,21 @@ mailbox_size_limit = 0
 smtpd_recipient_restrictions =
         permit_mynetworks
         permit_sasl_authenticated
-        reject_unknown_sender_domain
-        reject_unknown_recipient_domain
+#        reject_unknown_sender_domain
+#        reject_unknown_recipient_domain
         reject_unauth_pipelining
         reject_rbl_client ix.dnsbl.manitu.net
         reject_unauth_destination
         check_policy_service inet:postgrey:10023
 smtpd_sender_restrictions = reject_unknown_sender_domain
 unknown_address_reject_code = 554
-smtpd_client_restrictions = reject_unknown_client
-unknown_client_reject_code = 554
+#smtpd_client_restrictions = reject_unknown_client
+#unknown_client_reject_code = 554
 
 tls_random_source = dev:/dev/urandom
 
 message_size_limit = 0
+
+#myorigin = /etc/virtual/mailname
+
+myorigin = /etc/mailname
