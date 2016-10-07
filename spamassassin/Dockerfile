@@ -3,19 +3,16 @@ FROM alpine:3.4
 MAINTAINER Dave English <dave@lutnos.com>
 
 RUN apk update && \
-    apk add rsyslog spamassassin razor supervisor curl
+    apk add rsyslog spamassassin razor curl
 
-RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
-           /etc/rsyslog.conf && \
-    touch /var/log/maillog && \
-    mkdir -p /etc/rsyslog.d
-RUN echo '$IncludeConfig /etc/rsyslog.d/*.conf' >> /etc/rsyslog.conf
+RUN touch /var/log/maillog
 
 RUN mkdir -p /etc/virtual
 
+ADD rsyslog.conf /etc/rsyslog.conf
+
 COPY etc /etc/spamassassin
 COPY share /usr/share/spamassassin
-ADD supervisord.ini /etc/supervisord.d/supervisord.ini
 
 RUN adduser -D -u 701 spamd
 RUN /usr/bin/sa-update -v

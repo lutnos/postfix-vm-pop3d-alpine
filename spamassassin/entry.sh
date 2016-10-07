@@ -1,9 +1,11 @@
 #!/bin/sh
 
-# /usr/bin/sa-update -v
+if [ -f /var/run/rsyslogd.pid ]; then rm /var/run/rsyslogd.pid; fi
+/usr/sbin/rsyslogd -n &
 
-# remote syslog server to docker host
-SYSLOG=`netstat -rn|grep ^0.0.0.0|awk '{print $2}'`
-echo "*.*	@$SYSLOG" > /etc/rsyslog.d/50-default.conf
+# /usr/bin/sa-update --verbose
 
-/usr/bin/supervisord -c /etc/supervisord.d/supervisord.ini
+/usr/sbin/spamd --daemonize --listen=0.0.0.0:783 --allowed-ips=172.16.0.0/12 --pidfile /var/run/spamd.pid \&
+  --syslog=mail --username=spamd --nouser-config --max-children=5 --create-prefs --helper-home-dir &
+
+tail -f /var/log/maillog
