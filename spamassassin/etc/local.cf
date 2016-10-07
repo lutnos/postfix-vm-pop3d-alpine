@@ -86,3 +86,6 @@ ifplugin Mail::SpamAssassin::Plugin::Shortcircuit
 
 endif # Mail::SpamAssassin::Plugin::Shortcircuit
 
+## Add a spamassassin header to all messages so that we can filter them out
+add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
+

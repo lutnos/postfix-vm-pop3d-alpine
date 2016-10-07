@@ -19,7 +19,7 @@ docker compose up
 ## Configure users
 
 This example configures me@mydomain.com and another@mydomain.com .  The me@mydomain.com mailbox will also
-receive any other mail fpor mydomain.com not exp[licitly configured.
+receive any other mail for mydomain.com not explicitly configured.
 
 ./demo.sh from the host will do this, just enter a pw1 and a pw2 .
 
@@ -35,6 +35,8 @@ docker exec -t postfixvmpop3dalpine_smtp_1 postmap /etc/virtual/vmailbox
 docker exec postfixvmpop3dalpine_smtp_1 mkdir -p /etc/virtual/mydomain.com
 docker exec -it postfixvmpop3dalpine_pop3_1 htpasswd -c -B /etc/virtual/mydomain.com/passwd me
 docker exec -it postfixvmpop3dalpine_pop3_1 htpasswd -B /etc/virtual/mydomain.com/passwd another
+
+echo mail.mydomain.com |docker exec -i postfixvmpop3dalpine_smtp_1 sh -c 'cat - > /etc/virtual/mailname'
 ```
 
 ## Test

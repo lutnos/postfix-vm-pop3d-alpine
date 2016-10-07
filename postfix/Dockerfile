@@ -14,6 +14,11 @@ RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' /etc/rsyslog.conf &&
 
 COPY postfix /etc/postfix
 
+RUN adduser -D -u 700 spamc
+RUN /usr/bin/newaliases
+
+RUN ln -s /etc/virtual/mailname /etc/mailname
+
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
 

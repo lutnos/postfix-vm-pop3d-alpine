@@ -7,7 +7,9 @@ RUN apk update && \
 
 RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
            /etc/rsyslog.conf && \
-    touch /var/log/maillog
+    touch /var/log/maillog && \
+    mkdir -p /etc/rsyslog.d
+RUN echo '$IncludeConfig /etc/rsyslog.d/*.conf' >> /etc/rsyslog.conf
 
 ADD supervisord.ini /etc/supervisord.d/supervisord.ini
 
