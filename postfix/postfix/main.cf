@@ -720,7 +720,7 @@ smtpd_recipient_restrictions =
         reject_rbl_client ix.dnsbl.manitu.net
         reject_unauth_destination
         check_policy_service inet:postgrey:10023
-smtpd_sender_restrictions = reject_unknown_sender_domain
+#smtpd_sender_restrictions = reject_unknown_sender_domain
 unknown_address_reject_code = 554
 #smtpd_client_restrictions = reject_unknown_client
 #unknown_client_reject_code = 554
