@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# remote syslog server to docker host
-SYSLOG=`netstat -rn|grep ^0.0.0.0|awk '{print $2}'`
-echo "*.*	@$SYSLOG" > /etc/rsyslog.d/50-default.conf
+if [ -f /var/run/rsyslogd.pid ]; then rm /var/run/rsyslogd.pid; fi
+/usr/sbin/rsyslogd -n &
 
-/usr/bin/supervisord -c /etc/supervisord.d/supervisord.ini
+/usr/sbin/postgrey --daemonize --inet=0.0.0.0:10023 --pidfile=/var/run/postgrey.pid --delay=50 --greylist-text='Greylisted for %s seconds'
+
+tail -f /var/log/maillog
