@@ -136,5 +136,5 @@ smtps     inet  n       -       n       -       -       smtpd
   -o content_filter=spamassassin
 
 spamassassin      unix   -        n      n       -       -   pipe
-        user=spamc argv=/usr/bin/spamc -f -d spamassassin -p 783 -e
-        /usr/sbin/sendmail -oi -f  ${sender} ${recipient}
+        user=spamc argv=/usr/bin/spamc --dest spamassassin --port 783 --username spamd
+        --pipe-to /usr/sbin/sendmail -oi -f ${sender} ${recipient}

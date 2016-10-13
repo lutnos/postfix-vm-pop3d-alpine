@@ -5,9 +5,9 @@ MAINTAINER Dave English <dave@lutnos.com>
 RUN apk update && \
     apk add rsyslog postgrey perl-netaddr-ip
 
-RUN touch /var/log/maillog
+COPY etc /etc
 
-ADD rsyslog.conf /etc/rsyslog.conf
+RUN touch /var/log/messages
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh

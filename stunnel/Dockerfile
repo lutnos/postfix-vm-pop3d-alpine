@@ -9,9 +9,7 @@ RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositor
 RUN apk update && \
     apk add stunnel
 
-ADD stunnel.conf /etc/stunnel/stunnel.conf
-ADD ssl-cert-snakeoil.pem /etc/ssl/certs/ssl-cert-snakeoil.pem
-ADD ssl-cert-snakeoil.key /etc/ssl/private/ssl-cert-snakeoil.key
+COPY etc /etc
 RUN chmod 0400 /etc/ssl/private/ssl-cert-snakeoil.key
 
 RUN mkdir -p /var/stunnel
