@@ -5,4 +5,4 @@ if [ -f /var/run/rsyslogd.pid ]; then rm /var/run/rsyslogd.pid; fi
 
 vm-pop3d -d --user vmail
 
-tail -f /var/log/maillog
+tail -f /var/log/messages

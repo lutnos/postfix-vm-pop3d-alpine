@@ -5,19 +5,14 @@ MAINTAINER Dave English <dave@lutnos.com>
 RUN apk update && \
     apk add postfix rsyslog openssl spamassassin-client
 
-ADD ssl-cert-snakeoil.pem /etc/ssl/certs/ssl-cert-snakeoil.pem
-ADD ssl-cert-snakeoil.key /etc/ssl/private/ssl-cert-snakeoil.key
+RUN adduser -D -H spamc
+
+COPY etc /etc
 RUN chmod 0400 /etc/ssl/private/ssl-cert-snakeoil.key
 
-RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' /etc/rsyslog.conf && \
-    touch /var/log/maillog
-
-COPY postfix /etc/postfix
-
-RUN adduser -D -u 700 spamc
 RUN /usr/bin/newaliases
 
-RUN ln -s /etc/virtual/mailname /etc/mailname
+RUN touch /var/log/messages
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh

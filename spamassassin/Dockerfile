@@ -5,17 +5,14 @@ MAINTAINER Dave English <dave@lutnos.com>
 RUN apk update && \
     apk add rsyslog spamassassin razor curl
 
-RUN touch /var/log/maillog
+RUN adduser -D -H spamd
 
-RUN mkdir -p /etc/virtual
-
-ADD rsyslog.conf /etc/rsyslog.conf
-
-COPY etc /etc/spamassassin
+COPY etc /etc
 COPY share /usr/share/spamassassin
 
-RUN adduser -D -u 701 spamd
 RUN /usr/bin/sa-update -v
+
+RUN touch /var/log/messages
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh

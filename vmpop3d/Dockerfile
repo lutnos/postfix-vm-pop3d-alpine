@@ -23,9 +23,9 @@ RUN apk update && \
     apk del --purge make libc-dev gcc wget && \
     rm /var/cache/apk/*
 
-RUN sed -i -e 's/\$ModLoad imklog.so/#\$ModLoad imklog.so/' \
-           /etc/rsyslog.conf && \
-    touch /var/log/maillog
+COPY etc /etc
+
+RUN touch /var/log/messages
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
