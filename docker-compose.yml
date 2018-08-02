@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   spamassassin:
@@ -6,11 +6,17 @@ services:
     image: vmail-spamassassin:1.2
     ports:
       - "783:783"
+    deploy:
+      restart_policy:
+        condition: always
   postgrey:
     build: postgrey
     image: vmail-postgrey:1.2
     ports:
       - "10023:10023"
+    deploy:
+      restart_policy:
+        condition: always
   smtp:
     build: postfix
     image: vmail-postfix:1.2
@@ -23,6 +29,9 @@ services:
     links:
       - spamassassin
       - postgrey
+    deploy:
+      restart_policy:
+        condition: always
   pop3:
     build: vmpop3d
     image: vmail-vmpop3d:1.2
@@ -31,6 +40,9 @@ services:
       - postfix-vm-pop3d-spool:/var/spool/virtual
     ports:
       - "110:110"
+    deploy:
+      restart_policy:
+        condition: always
   stunnel:
     build: stunnel
     image: vmail-stunnel:1.2
