@@ -5,7 +5,7 @@ MAINTAINER Dave English <dave@lutnos.com>
 RUN apk update && \
     apk add rsyslog spamassassin razor curl
 
-RUN adduser -D -H spamd
+RUN adduser -D spamd
 
 COPY etc /etc
 COPY share /usr/share/spamassassin
