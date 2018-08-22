@@ -13,7 +13,7 @@ Kitematic offers a GUI interface for docker
 ## Start container
 
 ```
-docker compose up
+docker-compose up
 ```
 
 ## Configure users
