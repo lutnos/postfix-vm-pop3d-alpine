@@ -1,0 +1,11 @@
+--- vm-pop3d.h.was
++++ vm-pop3d.h
+@@ -23,7 +23,7 @@
+ #include "config.h"
+ 
+ /* The version */
+-#define VERSION		"1.1.6"
++#define VERSION		"1.1.6-lutnos"
+ 
+ /* The implementation */
+ #define	IMPL		"vm-pop3d"

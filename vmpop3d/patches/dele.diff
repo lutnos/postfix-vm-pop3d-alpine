@@ -1,0 +1,10 @@
+--- dele.c.was
++++ dele.c
+@@ -40,6 +40,8 @@
+   } else
+     return ERR_NO_MESG;
+ 
++  syslog(LOG_INFO, "Delete %s", arg)                                 
++
+   fprintf(ofile, "+OK Message %d marked\r\n", num + 1);
+   return OK;

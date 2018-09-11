@@ -10,11 +10,17 @@ RUN addgroup -g 600 postdrop && \
 RUN apk update && \
     apk add apache2-utils rsyslog
 
+COPY patches /
+
 RUN apk update && \
     apk add wget gcc libc-dev make && \
     wget http://www.ibiblio.org/pub/Linux/system/mail/pop/vm-pop3d-1.1.6.tar.gz && \
     tar xzvf vm-pop3d-1.1.6.tar.gz && \
     cd vm-pop3d-1.1.6 && \
+    patch -i /vm-pop3d.diff vm-pop3d.h && \
+    patch -i /retr.diff retr.c && \
+    patch -i /dele.diff dele.c && \
+    rm /*.diff && \
     ./configure --enable-virtual --prefix=/usr && \
     make install && \
     cd .. && \
