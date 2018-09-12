@@ -24,7 +24,7 @@
 +          buf[strlen(buf) - 1] = '\0'; 
 +          if (!strncmp(buf, "Message-Id:", 11))                             
 +            syslog(LOG_INFO, "Retrieved %s", buf);
-+          buf[strlen(buf) - 1] = '\n'; 
++          buf[strlen(buf)] = '\n';
 +        }                             
        }
        if (strchr(buf, '\n')) {
