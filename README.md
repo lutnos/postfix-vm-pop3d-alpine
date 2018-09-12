@@ -80,3 +80,6 @@ test
 quit
 
 ```
+
+## Restart policy
+Particularly on a CoreOS host, it is wise to set a restart policy.  Unfortunately this is not yet possible from docker-compose, I think, but the script file update-restart.sh will effect this.res
