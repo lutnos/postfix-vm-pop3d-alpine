@@ -4,8 +4,8 @@
  #include "config.h"
  
  /* The version */
--#define VERSION		"1.1.6"
-+#define VERSION		"1.1.6-lutnos"
+-#define VERSION		"1.1.7f-DA-2"
++#define VERSION		"1.1.7f-lutnos"
  
  /* The implementation */
  #define	IMPL		"vm-pop3d"
