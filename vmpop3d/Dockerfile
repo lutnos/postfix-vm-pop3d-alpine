@@ -14,9 +14,9 @@ COPY patches /
 
 RUN apk update && \
     apk add wget gcc libc-dev make && \
-    wget http://www.ibiblio.org/pub/Linux/system/mail/pop/vm-pop3d-1.1.6.tar.gz && \
-    tar xzvf vm-pop3d-1.1.6.tar.gz && \
-    cd vm-pop3d-1.1.6 && \
+    wget http://files.directadmin.com/services/da_vm-pop3d-1.1.7f.tar.gz && \
+    tar xzvf da_vm-pop3d-1.1.7f.tar.gz && \
+    cd da_vm-pop3d-1.1.7f && \
     patch -i /vm-pop3d.diff vm-pop3d.h && \
     patch -i /retr.diff retr.c && \
     patch -i /dele.diff dele.c && \
@@ -24,8 +24,8 @@ RUN apk update && \
     ./configure --enable-virtual --prefix=/usr && \
     make install && \
     cd .. && \
-    rm -rf vm-pop3d-1.1.6 && \
-    rm vm-pop3d-1.1.6.tar.gz && \
+    rm -rf da_vm-pop3d-1.1.7f && \
+    rm da_vm-pop3d-1.1.7f.tar.gz && \
     apk del --purge make libc-dev gcc wget && \
     rm /var/cache/apk/*
 
