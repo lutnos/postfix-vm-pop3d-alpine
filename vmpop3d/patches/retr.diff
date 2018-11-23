@@ -1,3 +1,5 @@
+--- retr.c.0
++++ retr.c.1
 @@ -26,6 +26,7 @@
  {
      int mesg, empty_line = 0, new_line = 1;
@@ -10,18 +12,18 @@
  		    /* DA END */
  		} else if (*buf == '\n') {
  		    empty_line = 1;
-+            body = 1;
++		    body = 1;
  		} else
  		    empty_line = 0;
  	    }
-+        if (new_line && !body) {
-+          if (strchr(buf, '\n')) {
-+            buf[strlen(buf) - 1] = '\0';
-+            if (!strncmp(buf, "Message-Id:", 11))
-+              syslog(LOG_INFO, "Retrieved %s", buf);
-+            buf[strlen(buf)] = '\n';
-+          }
-+        }
++            if (new_line && !body) {
++              if (strchr(buf, '\n')) {
++                buf[strlen(buf) - 1] = '\0';
++                if (!strncmp(buf, "Message-Id:", 11))
++                  syslog(LOG_INFO, "Retrieved %s", buf);
++                  buf[strlen(buf)] = '\n';
++              }
++            }
  	    if ((p = memchr(buf, '\n', FREAD_SIZE)) != NULL) {
  		len = p - buf;
  		if (len <= FREAD_SIZE-2){
