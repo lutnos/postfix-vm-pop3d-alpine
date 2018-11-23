@@ -5,7 +5,6 @@ MAINTAINER Dave English <dave@lutnos.com>
 RUN apk update && \
     apk add openssl
 
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories
 RUN apk update && \
     apk add stunnel
 
