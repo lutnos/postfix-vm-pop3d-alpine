@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.10
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -16,8 +16,6 @@ RUN touch /var/log/messages
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
-
-RUN echo 1.2
 
 VOLUME /var/spool/virtual
 VOLUME /etc/virtual

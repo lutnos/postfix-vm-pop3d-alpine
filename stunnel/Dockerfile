@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.10
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -15,8 +15,6 @@ RUN mkdir -p /var/stunnel
 
 ADD entry.sh /entry.sh
 RUN chmod +x /entry.sh
-
-RUN echo 1.2
 
 EXPOSE 995
 
