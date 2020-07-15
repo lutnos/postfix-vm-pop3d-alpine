@@ -1,0 +1,23 @@
+--- /etc/postfix/master.cf
++++ /test/etc/postfix/master.cf
+@@ -10,6 +10,7 @@
+ #               (yes)   (yes)   (no)    (never) (100)
+ # ==========================================================================
+ smtp      inet  n       -       n       -       -       smtpd
++  -o content_filter=spamassassin
+ #smtp      inet  n       -       n       -       1       postscreen
+ #smtpd     pass  -       -       n       -       -       smtpd
+ #dnsblog   unix  -       -       n       -       0       dnsblog
+@@ -131,3 +132,12 @@
+ #mailman   unix  -       n       n       -       -       pipe
+ #  flags=FRX user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py
+ #  ${nexthop} ${user}
++
++smtps     inet  n       -       n       -       -       smtpd
++  -o syslog_name=postfix/smtps
++  -o smtpd_tls_wrappermode=yes
++  -o content_filter=spamassassin
++
++spamassassin      unix   -        n      n       -       -   pipe
++        user=spamc argv=/usr/bin/spamc --dest spamassassin --port 783 --username spamd
++        --pipe-to /usr/sbin/sendmail -oi -f ${sender} ${recipient}

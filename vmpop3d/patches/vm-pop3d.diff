@@ -5,7 +5,7 @@
  
  /* The version */
 -#define VERSION		"1.1.7f-DA-2"
-+#define VERSION		"1.1.7f-lutnos"
++#define VERSION		"1.1.7g-lutnos"
  
  /* The implementation */
  #define	IMPL		"vm-pop3d"

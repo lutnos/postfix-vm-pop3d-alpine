@@ -3,12 +3,17 @@ FROM alpine:3.10
 MAINTAINER Dave English <dave@lutnos.com>
 
 RUN apk update && \
-    apk add rsyslog spamassassin razor curl
+    apk add rsyslog spamassassin razor curl patch
 
 RUN adduser -D spamd
 
-COPY etc /etc
-COPY share /usr/share/spamassassin
+COPY diff /diff
+
+RUN patch -p 1 /etc/rsyslog.conf </diff/rsyslog.conf.diff
+
+RUN rm -rf /diff
+
+COPY new /
 
 RUN /usr/bin/sa-update -v
 

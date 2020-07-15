@@ -1,13 +1,22 @@
-FROM alpine:3.10
+FROM alpine:3.12
 
 MAINTAINER Dave English <dave@lutnos.com>
 
 RUN apk update && \
-    apk add postfix rsyslog openssl spamassassin-client
+    apk add postfix rsyslog openssl spamassassin-client patch
 
 RUN adduser -D -H spamc
 
-COPY etc /etc
+COPY diff /diff
+
+RUN patch -p 1 /etc/rsyslog.conf </diff/rsyslog.conf.diff
+RUN patch -p 1 /etc/postfix/main.cf </diff/main.cf.diff
+RUN patch -p 1 /etc/postfix/master.cf </diff/master.cf.diff
+
+RUN rm -rf /diff
+
+COPY new /
+
 RUN chmod 0400 /etc/ssl/private/ssl-cert-snakeoil.key
 
 RUN /usr/bin/newaliases

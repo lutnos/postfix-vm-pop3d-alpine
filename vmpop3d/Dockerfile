@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine:3.12
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -8,7 +8,7 @@ RUN addgroup -g 600 postdrop && \
     chown vmail:postdrop /var/spool/virtual
 
 RUN apk update && \
-    apk add apache2-utils rsyslog
+    apk add apache2-utils rsyslog patch
 
 COPY patches /
 
@@ -29,7 +29,11 @@ RUN apk update && \
     apk del --purge make libc-dev gcc wget && \
     rm /var/cache/apk/*
 
-COPY etc /etc
+COPY diff /diff
+
+RUN patch -p 1 /etc/rsyslog.conf </diff/rsyslog.conf.diff
+
+RUN rm -rf /diff
 
 RUN touch /var/log/messages
 

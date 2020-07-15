@@ -8,7 +8,8 @@ RUN apk update && \
 RUN apk update && \
     apk add stunnel
 
-COPY etc /etc
+RUN mkdir /e && cp -r /etc/* /e
+COPY new/etc /etc
 RUN chmod 0400 /etc/ssl/private/ssl-cert-snakeoil.key
 
 RUN mkdir -p /var/stunnel
