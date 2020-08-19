@@ -1,0 +1,38 @@
+--- /etc/mail/spamassassin/local.cf
++++ /test/etc/spamassassin-3.12/local.cf
+@@ -9,7 +9,7 @@
+ 
+ #   Add *****SPAM***** to the Subject header of spam e-mails
+ #
+-# rewrite_header Subject *****SPAM*****
++rewrite_header Subject *****SPAM*****
+ 
+ 
+ #   Save spam messages as a message/rfc822 MIME attachment instead of
+@@ -21,7 +21,7 @@
+ #   Set which networks or hosts are considered 'trusted' by your mail
+ #   server (i.e. not spammers)
+ #
+-# trusted_networks 212.17.35.
++trusted_networks 192.168.10.
+ 
+ 
+ #   Set file-locking method (flock is not safe over NFS, but is faster)
+@@ -51,6 +51,9 @@
+ # bayes_ignore_header X-Spam-Flag
+ # bayes_ignore_header X-Spam-Status
+ 
++# Enable/disable network checks
++skip_rbl_checks 1
++use_pyzor 0
+ 
+ #   Whether to decode non- UTF-8 and non-ASCII textual parts and recode
+ #   them to UTF-8 before the text is given over to rules processing.
+@@ -107,3 +110,7 @@
+ # shortcircuit BAYES_00                ham
+ 
+ endif # Mail::SpamAssassin::Plugin::Shortcircuit
++
++## Add a spamassassin header to all messages so that we can filter them out
++add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
++

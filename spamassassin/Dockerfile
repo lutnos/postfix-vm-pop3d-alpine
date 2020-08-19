@@ -11,9 +11,11 @@ COPY diff /diff
 
 RUN patch -p 1 /etc/rsyslog.conf </diff/rsyslog.conf.diff
 
-RUN rm -rf /diff
+RUN patch -p 1 /etc/mail/spamassassin/local.cf </diff/local.cf.diff
 
-COPY new /
+RUN patch -p 1 /etc/mail/spamassassin/v320.pre </diff/v320.pre.diff
+
+RUN rm -rf /diff
 
 RUN /usr/bin/sa-update -v
 
