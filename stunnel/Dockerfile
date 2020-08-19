@@ -3,13 +3,21 @@ FROM alpine:3.10
 MAINTAINER Dave English <dave@lutnos.com>
 
 RUN apk update && \
-    apk add openssl
+    apk add openssl stunnel
 
-RUN apk update && \
-    apk add stunnel
+COPY diff /diff
 
-COPY new/etc /etc
-RUN chmod 0400 /etc/ssl/private/ssl-cert-snakeoil.key
+RUN patch -p 1 /etc/stunnel/stunnel.conf </diff/stunnel.conf.diff
+
+RUN rm -rf /diff
+
+RUN cd /etc/ssl && \
+    openssl genrsa -des3 -passout pass:pass -out server.pass.key 2048 && \
+    openssl rsa -passin pass:pass -in server.pass.key -out private/server.key && \
+    rm server.pass.key && \
+    openssl req -new -key private/server.key -nodes -out server.csr \
+            -subj "/C=UK/O=lutnos/OU=home/CN=lutnos.com" && \
+    openssl x509 -req -days 3650 -in server.csr -signkey private/server.key -out certs/server.pem
 
 RUN mkdir -p /var/stunnel
 

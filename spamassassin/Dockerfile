@@ -3,7 +3,7 @@ FROM alpine:3.10
 MAINTAINER Dave English <dave@lutnos.com>
 
 RUN apk update && \
-    apk add rsyslog spamassassin razor curl patch
+    apk add rsyslog spamassassin spamassassin-compiler razor curl patch
 
 RUN adduser -D spamd
 
@@ -18,6 +18,7 @@ RUN patch -p 1 /etc/mail/spamassassin/v320.pre </diff/v320.pre.diff
 RUN rm -rf /diff
 
 RUN /usr/bin/sa-update -v
+RUN /usr/bin/sa-compile
 
 RUN touch /var/log/messages
 

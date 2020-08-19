@@ -1,0 +1,46 @@
+--- /etc/stunnel/stunnel.conf
++++ /test/stunnel/stunnel.conf
+@@ -5,13 +5,17 @@
+ # Certificate/key is needed in server mode and optional in client mode
+ # cert = /etc/stunnel/stunnel.pem
+ # key = /etc/stunnel/stunnel.pem
++cert = /etc/ssl/certs/server.pem
++key = /etc/ssl/private/server.key
+ 
+ # Some security enhancements for UNIX systems - comment them out on Win32
+ # chroot = /chroot/stunnel/
+-setuid = stunnel
+-setgid = stunnel
++chroot = /var/stunnel
++# setuid = stunnel
++# setgid = stunnel
+ # PID is created inside chroot jail
+-pid = /run/stunnel/stunnel.pid
++# pid = /run/stunnel/stunnel.pid
++pid = /stunnel4.pid
+ 
+ # Some performance tunings
+ socket = l:TCP_NODELAY=1
+@@ -37,15 +41,21 @@
+ # Some debugging stuff useful for troubleshooting
+ #debug = 7
+ #output = stunnel.log
++debug = 6
++output = /stunnel.log
+ 
+ # Use it for client mode
+-client = yes
++# client = yes
++client = no
+ 
+ # Service-level configuration
+ 
+ #[pop3s]
+ #accept  = 995
+ #connect = 110
++[pop3s]
++accept = 0.0.0.0:995
++connect = pop3:110
+ 
+ #[imaps]
+ #accept  = 993
