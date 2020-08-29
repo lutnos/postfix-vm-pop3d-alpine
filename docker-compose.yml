@@ -4,11 +4,15 @@ services:
   spamassassin:
     build: spamassassin
     image: vmail-spamassassin:1.4
+    volumes:
+      - postfix-vm-pop3d-tuning:/etc/tuning
     ports:
       - "783:783"
   postgrey:
     build: postgrey
     image: vmail-postgrey:1.4
+    volumes:
+      - postfix-vm-pop3d-tuning:/etc/tuning
     ports:
       - "10023:10023"
   smtp:
@@ -42,3 +46,4 @@ services:
 volumes:
   postfix-vm-pop3d-etc:
   postfix-vm-pop3d-spool:
+  postfix-vm-pop3d-tuning:
