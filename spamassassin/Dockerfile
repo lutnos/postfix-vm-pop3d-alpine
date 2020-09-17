@@ -1,8 +1,8 @@
-FROM alpine:3.10
+FROM alpine:3.12
 
 MAINTAINER Dave English <dave@lutnos.com>
 
-RUN apk update && \
+RUN apk update && apk upgrade && \
     apk add rsyslog spamassassin spamassassin-compiler razor curl patch
 
 RUN adduser -D spamd

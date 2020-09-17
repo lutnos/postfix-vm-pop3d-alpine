@@ -2,7 +2,7 @@ FROM alpine:3.12
 
 MAINTAINER Dave English <dave@lutnos.com>
 
-RUN apk update && \
+RUN apk update && apk update && \
     apk add postfix rsyslog openssl spamassassin-client patch
 
 RUN adduser -D -H spamc

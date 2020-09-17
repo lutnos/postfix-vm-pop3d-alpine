@@ -1,9 +1,9 @@
-FROM alpine:3.10
+FROM alpine:3.12
 
 MAINTAINER Dave English <dave@lutnos.com>
 
-RUN apk update && \
-    apk add openssl stunnel
+RUN apk update && apk update && \
+    apk add openssl stunnel patch
 
 COPY diff /diff
 

@@ -2,7 +2,7 @@ FROM alpine:3.12
 
 MAINTAINER Dave English <dave@lutnos.com>
 
-RUN apk update && \
+RUN apk update && apk update && \
     apk add rsyslog postgrey perl-netaddr-ip patch
     
 RUN mkdir /etc/volume && mv /etc/postfix/postgrey_whitelist_clients /etc/volume && \
