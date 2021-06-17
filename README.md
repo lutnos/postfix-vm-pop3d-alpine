@@ -81,5 +81,25 @@ quit
 
 ```
 
+## Development - when updating diffs for a new distro version
+
+To export the new distribution files, for example for postgrey
+```
+docker compose build postgrey
+mkdir -p postgrey/config/tmp/dist
+docker compose run --entrypoint /export.sh postgrey |base64 -d |tar x -C postgrey/config/tmp/dist
+
+```
+
+copy files from tmp/dist to tmp/new and then update the files there
+
+finally
+```
+docker compose run --entrypoint /diff.sh postgrey |base64 -d |tar x -C postgrey/config/diff
+docker compose build postgrey
+
+```
+
+
 ## Restart policy
 Particularly on a CoreOS host, it is wise to set a restart policy.  Unfortunately this is not yet possible from docker-compose, I think, but the script file update-restart.sh will effect this.res

@@ -1,0 +1,182 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create an Amazon EC2 instance running the Amazon Linux 2 AMI. The instance then installs postfix-vm-pop3d
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Default: test1
+    ConstraintDescription: must be the name of an existing EC2 KeyPair
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+    ConstraintDescription: must be a valid EC2 instance type
+  clientLocation:
+    Description: The IP address range that can be used access the EC2 instance
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x
+Mappings:
+  AWSInstanceType2Arch:
+    t2.micro:
+      Arch: HVM64
+  AWSRegionArch2AMI:
+    eu-west-2:
+      HVM64: ami-0dbec48abfe298cab
+Resources:
+  myVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/28
+  myInternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+  myVPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref myVPC
+      InternetGatewayId: !Ref myInternetGateway
+  mySubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref myVPC
+      CidrBlock: 10.0.0.0/28
+      MapPublicIpOnLaunch: true
+  myRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref myVPC
+  myRoute:
+    Type: 'AWS::EC2::Route'
+    DependsOn: myInternetGateway
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref myInternetGateway
+      RouteTableId: !Ref myRouteTable
+  mySubnetRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref myRouteTable
+      SubnetId: !Ref mySubnet
+  mySecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable access to my instance
+      VpcId: !Ref myVPC
+  sshSecurityGroupIngress:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      Description: Enable SSH access via port 22 from location
+      GroupId: !GetAtt mySecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 22
+      ToPort: 22
+      CidrIp: !Ref clientLocation
+  pop3sSecurityGroupIngress:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      Description: Enable POP3S access via port 22 from location
+      GroupId: !GetAtt mySecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 995
+      ToPort: 995
+      CidrIp: !Ref clientLocation
+  smtpSecurityGroupIngress:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      Description: Enable SMTP access via port 22 from anywhere
+      GroupId: !GetAtt mySecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 25
+      ToPort: 25
+      CidrIp: 0.0.0.0/0
+  smtpsSecurityGroupIngress:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      Description: Enable SMTPS access via port 465 from anywhere
+      GroupId: !GetAtt mySecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 465
+      ToPort: 465
+      CidrIp: 0.0.0.0/0
+  myEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref mySubnet
+      SecurityGroupIds:
+        - !Ref mySecurityGroup
+      ImageId: !FindInMap
+        - AWSRegionArch2AMI
+        - !Ref 'AWS::Region'
+        - !FindInMap
+          - AWSInstanceType2Arch
+          - !Ref InstanceType
+          - Arch
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -xe
+            - |
+              yum install docker git -y
+            - |
+              sudo systemctl start docker.service
+            - |
+              sudo chkconfig docker on
+            - >+
+              sudo curl -L
+              https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname
+              -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+            - |
+              sudo chmod +x /usr/local/bin/docker-compose
+            - |
+              sudo usermod -a -G docker ec2-user
+            - |
+              git clone https://github.com/lutnos/postfix-vm-pop3d-alpine.git
+            - |
+              cd postfix-vm-pop3d-alpine
+            - |
+              git checkout 2020
+            - |
+              sudo /usr/local/bin/docker-compose build
+            - |
+              sudo systemctl disable postfix
+            - |
+              sudo systemctl stop postfix
+            - |
+              sudo /usr/local/bin/docker-compose up &
+            - |
+              sleep 10
+            - >
+              sudo docker update --restart unless-stopped
+              postfix-vm-pop3d-alpine_smtp_1
+            - >
+              sudo docker update --restart unless-stopped
+              postfix-vm-pop3d-alpine_stunnel_1
+            - >
+              sudo docker update --restart unless-stopped
+              postfix-vm-pop3d-alpine_spamassassin_1
+            - >
+              sudo docker update --restart unless-stopped
+              postfix-vm-pop3d-alpine_vmpop3d_1
+            - >
+              sudo docker update --restart unless-stopped
+              postfix-vm-pop3d-alpine_postgrey_1
+            - |
+              sudo reboot
+Outputs:
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
+    Value: !Ref myEC2Instance
+  PublicIP:
+    Description: Public IP address of the newly created EC2 instance
+    Value: !GetAtt
+      - myEC2Instance
+      - PublicIp

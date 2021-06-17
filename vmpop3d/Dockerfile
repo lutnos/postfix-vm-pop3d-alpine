@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:3.14
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -21,7 +21,7 @@ RUN apk update && \
     patch -i /retr.diff retr.c && \
     patch -i /dele.diff dele.c && \
     rm /*.diff && \
-    ./configure --enable-virtual --prefix=/usr && \
+    ./configure --enable-virtual --prefix=/usr CFLAGS="-fcommon" && \
     make install && \
     cd .. && \
     rm -rf da_vm-pop3d-1.1.7f && \
@@ -29,16 +29,16 @@ RUN apk update && \
     apk del --purge make libc-dev gcc wget && \
     rm /var/cache/apk/*
 
-COPY diff /diff
+RUN mkdir -p /dist && mkdir /dist/etc && cp /etc/rsyslog.conf /dist/etc
 
-RUN patch -p 1 /etc/rsyslog.conf </diff/rsyslog.conf.diff
+COPY config /config
 
-RUN rm -rf /diff
+RUN patch -p 1  </config/diff/etc/rsyslog.conf.diff && rm -rf /diff
 
 RUN touch /var/log/messages
 
-ADD entry.sh /entry.sh
-RUN chmod +x /entry.sh
+COPY sh /
+RUN chmod +x /*.sh
 
 VOLUME /var/spool/virtual
 VOLUME /etc/virtual

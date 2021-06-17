@@ -1,5 +1,5 @@
---- /etc/stunnel/stunnel.conf
-+++ /test/stunnel/stunnel.conf
+--- /dist/etc/stunnel/stunnel.conf
++++ /etc/stunnel/stunnel.conf
 @@ -5,13 +5,17 @@
  # Certificate/key is needed in server mode and optional in client mode
  # cert = /etc/stunnel/stunnel.pem
@@ -12,11 +12,11 @@
 -setuid = stunnel
 -setgid = stunnel
 +chroot = /var/stunnel
-+# setuid = stunnel
-+# setgid = stunnel
++#setuid = stunnel
++#setgid = stunnel
  # PID is created inside chroot jail
 -pid = /run/stunnel/stunnel.pid
-+# pid = /run/stunnel/stunnel.pid
++#pid = /run/stunnel/stunnel.pid
 +pid = /stunnel4.pid
  
  # Some performance tunings
@@ -30,7 +30,7 @@
  
  # Use it for client mode
 -client = yes
-+# client = yes
++#client = yes
 +client = no
  
  # Service-level configuration

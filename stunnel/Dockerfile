@@ -1,15 +1,15 @@
-FROM alpine:3.12
+FROM alpine:3.14
 
 MAINTAINER Dave English <dave@lutnos.com>
 
 RUN apk update && apk update && \
     apk add openssl stunnel patch
 
-COPY diff /diff
+RUN mkdir -p /dist && mkdir /dist/etc && mkdir /dist/etc/stunnel && cp /etc/stunnel/stunnel.conf /dist/etc/stunnel
 
-RUN patch -p 1 /etc/stunnel/stunnel.conf </diff/stunnel.conf.diff
+COPY config /config
 
-RUN rm -rf /diff
+RUN patch -p 1  </config/diff/etc/stunnel/stunnel.conf.diff && rm -rf /diff
 
 RUN cd /etc/ssl && \
     openssl genrsa -des3 -passout pass:pass -out server.pass.key 2048 && \
@@ -21,8 +21,8 @@ RUN cd /etc/ssl && \
 
 RUN mkdir -p /var/stunnel
 
-ADD entry.sh /entry.sh
-RUN chmod +x /entry.sh
+COPY sh /
+RUN chmod +x /*.sh
 
 EXPOSE 995
 

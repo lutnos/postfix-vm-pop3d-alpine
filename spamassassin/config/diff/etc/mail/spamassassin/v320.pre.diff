@@ -1,5 +1,5 @@
---- /etc/mail/spamassassin/v320.pre
-+++ /test/etc/spamassassin-3.12/v320.pre
+--- /dist/etc/mail/spamassassin/v320.pre
++++ /etc/mail/spamassassin/v320.pre
 @@ -50,7 +50,7 @@
  
  # Rule2XSBody - speedup by compilation of ruleset to native code

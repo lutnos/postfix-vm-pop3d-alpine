@@ -1,5 +1,5 @@
---- /etc/postfix/main.cf
-+++ /test/etc/postfix/main.cf
+--- /dist/etc/postfix/main.cf
++++ /etc/postfix/main.cf
 @@ -93,6 +93,7 @@
  #
  #myhostname = host.domain.tld
@@ -68,8 +68,8 @@
  shlib_directory = /usr/lib/postfix
 +
 +virtual_mailbox_base = /var/spool/virtual
-+virtual_mailbox_maps = hash:/etc/virtual/vmailbox
-+virtual_mailbox_domains = hash:/etc/virtual/vmaildomains
++virtual_mailbox_maps = lmdb:/etc/virtual/vmailbox
++virtual_mailbox_domains = lmdb:/etc/virtual/vmaildomains
 +virtual_uid_maps = static:500
 +virtual_gid_maps = static:600
 +virtual_mailbox_lock = dotlock
@@ -82,8 +82,8 @@
 +smtpd_tls_cert_file = /etc/ssl/certs/server.pem
 +smtpd_tls_key_file = /etc/ssl/private/server.key
 +smtpd_use_tls = yes
-+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
-+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
++smtpd_tls_session_cache_database = lmdb:${data_directory}/smtpd_scache
++smtp_tls_session_cache_database = lmdb:${data_directory}/smtp_scache
 +#smtpd_relay_restrictions = permit_mynetworks defer_unauth_destination
 +smtpd_relay_restrictions = permit_mynetworks reject_unauth_destination
 +

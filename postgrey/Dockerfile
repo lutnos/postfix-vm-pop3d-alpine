@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:3.14
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -8,14 +8,16 @@ RUN apk update && apk update && \
 RUN mkdir /etc/volume && mv /etc/postfix/postgrey_whitelist_clients /etc/volume && \
     mv /etc/postfix/postgrey_whitelist_recipients /etc/volume
 
-COPY diff /diff
+RUN mkdir -p /dist && mkdir /dist/etc && cp /etc/rsyslog.conf /dist/etc
 
-RUN patch -p 1 /etc/rsyslog.conf </diff/rsyslog.conf.diff
+COPY config /config
+
+RUN patch -p 1  </config/diff/etc/rsyslog.conf.diff && rm -rf /diff
 
 RUN touch /var/log/messages
 
-ADD entry.sh /entry.sh
-RUN chmod +x /entry.sh
+COPY sh /
+RUN chmod +x /*.sh
 
 VOLUME /etc/tuning
 

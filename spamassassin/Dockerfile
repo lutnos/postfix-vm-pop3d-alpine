@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:3.14
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -7,23 +7,19 @@ RUN apk update && apk upgrade && \
 
 RUN adduser -D spamd
 
-COPY diff /diff
+RUN mkdir -p /dist && mkdir /dist/etc && mkdir /dist/etc/mail && mkdir /dist/etc/mail/spamassassin && cp /etc/rsyslog.conf /dist/etc && cp /etc/mail/spamassassin/local.cf /dist/etc/mail/spamassassin && cp /etc/mail/spamassassin/v320.pre /dist/etc/mail/spamassassin
 
-RUN patch -p 1 /etc/rsyslog.conf </diff/rsyslog.conf.diff
+COPY config /config
 
-RUN mkdir /etc/volume && mv /etc/mail/spamassassin/local.cf /etc/volume && patch -p 1 /etc/volume/local.cf </diff/local.cf.diff
-
-RUN patch -p 1 /etc/mail/spamassassin/v320.pre </diff/v320.pre.diff
-
-RUN rm -rf /diff
+RUN patch -p 1 </config/diff/etc/rsyslog.conf.diff && patch -p 1 </config/diff/etc/mail/spamassassin/local.cf.diff && patch -p 1 </config/diff/etc/mail/spamassassin/v320.pre.diff && mkdir /etc/volume && mv /etc/mail/spamassassin/local.cf /etc/volume
 
 RUN /usr/bin/sa-update -v
 RUN /usr/bin/sa-compile
 
 RUN touch /var/log/messages
 
-ADD entry.sh /entry.sh
-RUN chmod +x /entry.sh
+COPY sh /
+RUN chmod +x /*.sh
 
 VOLUME /etc/tuning
 

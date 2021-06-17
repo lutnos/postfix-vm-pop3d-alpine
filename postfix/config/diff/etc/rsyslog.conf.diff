@@ -1,13 +1,6 @@
---- /etc/rsyslog.conf
-+++ /test/etc/rsyslog.conf
-@@ -24,42 +24,43 @@
- #$RepeatedMsgReduction on
- 
- # Include all config files in /etc/rsyslog.d/.
--include(file="/etc/rsyslog.d/*.conf" mode="optional")
-+#include(file="/etc/rsyslog.d/*.conf" mode="optional")
- 
- 
+--- /dist/etc/rsyslog.conf
++++ /etc/rsyslog.conf
+@@ -27,46 +27,49 @@
  #### Modules ####
  
  # Provides --MARK-- message capability.
@@ -21,7 +14,11 @@
 -module(load="imklog")
 +#module(load="imklog")
  
+-#### Config files ####
  
+-# Include all config files in /etc/rsyslog.d/.
+-include(file="/etc/rsyslog.d/*.conf" mode="optional")
+-
  #### Rules ####
  
  # Log all kernel messages to kern.log.
@@ -37,7 +34,7 @@
  
  # The authpriv file has restricted access.
 -authpriv.*						/var/log/auth.log
-+authpriv.*                                              /var/log/secure
++#authpriv.*						/var/log/auth.log
  
  # Log all the mail messages in one place.
 -mail.*							-/var/log/mail.log
@@ -53,3 +50,24 @@
  
  # Log all kernel messages to the console.
  # Logging much else clutters up the screen.
+ #kern.*							/dev/console
+ 
+ 
++#### Config files ####
++
++# Include all config files in /etc/rsyslog.d/.
++#include(file="/etc/rsyslog.d/*.conf" mode="optional")
++
++
+ ### Examples ####
+ 
+ # Send all logs to remote syslog via UDP.
+@@ -87,8 +90,3 @@
+ 
+ # Receive messages from remote host via UDP
+ # for parameters see http://www.rsyslog.com/doc/imudp.html
+-#module(load="imudp")  # needs to be done just once
+-#input(
+-#	type="imudp"
+-#	port="514"
+-#)

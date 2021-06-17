@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:3.14
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -7,13 +7,11 @@ RUN apk update && apk update && \
 
 RUN adduser -D -H spamc
 
-COPY diff /diff
+RUN mkdir -p /dist && mkdir /dist/etc && mkdir /dist/etc/postfix && cp /etc/rsyslog.conf /dist/etc && cp /etc/postfix/main.cf /dist/etc/postfix && cp /etc/postfix/master.cf /dist/etc/postfix
 
-RUN patch -p 1 /etc/rsyslog.conf </diff/rsyslog.conf.diff
-RUN patch -p 1 /etc/postfix/main.cf </diff/main.cf.diff
-RUN patch -p 1 /etc/postfix/master.cf </diff/master.cf.diff
+COPY config /config
 
-RUN rm -rf /diff
+RUN patch -p 1  </config/diff/etc/rsyslog.conf.diff && patch -p 1  </config/diff/etc/postfix/main.cf.diff && patch -p 1  </config/diff/etc/postfix/master.cf.diff && rm -rf /diff
 
 RUN cd /etc/ssl && \
     openssl genrsa -des3 -passout pass:pass -out server.pass.key 2048 && \
@@ -27,8 +25,8 @@ RUN /usr/bin/newaliases
 
 RUN touch /var/log/messages
 
-ADD entry.sh /entry.sh
-RUN chmod +x /entry.sh
+COPY sh /
+RUN chmod +x /*.sh
 
 VOLUME /var/spool/virtual
 VOLUME /etc/virtual
