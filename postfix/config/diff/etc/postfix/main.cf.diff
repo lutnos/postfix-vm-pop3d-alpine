@@ -1,6 +1,6 @@
 --- /dist/etc/postfix/main.cf
 +++ /etc/postfix/main.cf
-@@ -93,6 +93,7 @@
+@@ -97,6 +97,7 @@
  #
  #myhostname = host.domain.tld
  #myhostname = virtual.domain.tld
@@ -8,7 +8,7 @@
  
  # The mydomain parameter specifies the local internet domain name.
  # The default is to use $myhostname minus the first component.
-@@ -130,6 +131,7 @@
+@@ -134,6 +135,7 @@
  # Note: you need to stop/start Postfix when this parameter changes.
  #
  #inet_interfaces = all
@@ -16,7 +16,7 @@
  #inet_interfaces = $myhostname
  #inet_interfaces = $myhostname, localhost
  
-@@ -264,6 +266,7 @@
+@@ -271,6 +273,7 @@
  #mynetworks_style = class
  #mynetworks_style = subnet
  #mynetworks_style = host
@@ -24,7 +24,7 @@
  
  # Alternatively, you can specify the mynetworks list by hand, in
  # which case Postfix ignores the mynetworks_style setting.
-@@ -330,6 +333,7 @@
+@@ -339,6 +342,7 @@
  #relayhost = [mailserver.isp.tld]
  #relayhost = uucphost
  #relayhost = [an.ip.add.ress]
@@ -32,7 +32,7 @@
  
  # REJECTING UNKNOWN RELAY USERS
  #
-@@ -422,6 +426,7 @@
+@@ -431,6 +435,7 @@
  # trying user and .forward.
  #
  #recipient_delimiter = +
@@ -40,7 +40,7 @@
  
  # DELIVERY TO MAILBOX
  #
-@@ -567,7 +572,14 @@
+@@ -576,7 +581,14 @@
  #
  #smtpd_banner = $myhostname ESMTP $mail_name
  #smtpd_banner = $myhostname ESMTP $mail_name ($mail_version)
@@ -55,17 +55,16 @@
  # PARALLEL DELIVERY TO THE SAME DESTINATION
  #
  # How many parallel deliveries to the same user or domain? With local
-@@ -672,7 +684,53 @@
+@@ -681,7 +693,52 @@
  
  # readme_directory: The location of the Postfix README files.
  #
 -readme_directory = /usr/share/doc/postfix/readme
 +#readme_directory = /usr/share/doc/postfix/readme
 +readme_directory = no
-+
  inet_protocols = ipv4
- meta_directory = /etc/postfix
  shlib_directory = /usr/lib/postfix
+ meta_directory = /etc/postfix
 +
 +virtual_mailbox_base = /var/spool/virtual
 +virtual_mailbox_maps = lmdb:/etc/virtual/vmailbox
