@@ -10,7 +10,7 @@ services:
       - "783:783"
   postgrey:
     build: postgrey
-    image: vmail-postgrey:1.6
+    image: vmail-postgrey:1.6x
     volumes:
       - postfix-vm-pop3d-tuning:/etc/tuning
     ports:
