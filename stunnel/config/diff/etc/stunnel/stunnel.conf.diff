@@ -4,8 +4,8 @@
  # Certificate/key is needed in server mode and optional in client mode
  # cert = /etc/stunnel/stunnel.pem
  # key = /etc/stunnel/stunnel.pem
-+cert = /etc/ssl/certs/server.pem
-+key = /etc/ssl/private/server.key
++cert = /etc/stunnel/stunnel.pem
++key = /etc/stunnel/stunnel.pem
  
  # Some security enhancements for UNIX systems - comment them out on Win32
  # chroot = /chroot/stunnel/
@@ -21,11 +21,11 @@
  
  # Some performance tunings
  socket = l:TCP_NODELAY=1
-@@ -37,15 +41,21 @@
+@@ -37,15 +41,23 @@
  # Some debugging stuff useful for troubleshooting
  #debug = 7
  #output = stunnel.log
-+debug = 6
++debug = 7
 +output = /stunnel.log
  
  # Use it for client mode
@@ -41,6 +41,8 @@
 +[pop3s]
 +accept = 0.0.0.0:995
 +connect = pop3:110
++verifyPeer = no
++#CAfile = /etc/stunnel/clients.pem
  
  #[imaps]
  #accept  = 993

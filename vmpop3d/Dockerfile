@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.18.3
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -12,10 +12,11 @@ RUN apk update && apk update && \
 
 COPY patches /
 
+COPY tar /
+
 RUN apk update && \
-    apk add wget gcc libc-dev make && \
-    wget http://files.directadmin.com/services/da_vm-pop3d-1.1.7f.tar.gz && \
-    tar xzvf da_vm-pop3d-1.1.7f.tar.gz && \
+    apk add gcc libc-dev make && \
+    tar xzvf /da_vm-pop3d-1.1.7f.tar.gz && \
     cd da_vm-pop3d-1.1.7f && \
     patch -i /vm-pop3d.diff vm-pop3d.h && \
     patch -i /retr.diff retr.c && \

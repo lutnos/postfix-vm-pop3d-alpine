@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.18.3
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -9,15 +9,16 @@ RUN mkdir -p /dist && mkdir /dist/etc && mkdir /dist/etc/stunnel && cp /etc/stun
 
 COPY config /config
 
-RUN patch -p 1  </config/diff/etc/stunnel/stunnel.conf.diff && rm -rf /diff
+RUN patch -u -p 1 </config/diff/etc/stunnel/stunnel.conf.diff && rm -rf /diff && mkdir /etc/entry && mv /etc/stunnel/* /etc/entry && rmdir /etc/stunnel
 
-RUN cd /etc/ssl && \
+RUN cd /etc/entry && \
     openssl genrsa -des3 -passout pass:pass -out server.pass.key 2048 && \
-    openssl rsa -passin pass:pass -in server.pass.key -out private/server.key && \
+    openssl rsa -passin pass:pass -in server.pass.key -out server.key && \
     rm server.pass.key && \
-    openssl req -new -key private/server.key -nodes -out server.csr \
-            -subj "/C=UK/O=lutnos/OU=home/CN=lutnos.com" && \
-    openssl x509 -req -days 3650 -in server.csr -signkey private/server.key -out certs/server.pem
+    openssl req -new -key server.key -nodes -out server.csr \
+            -subj "/CN=mail.lutnos.com" && \
+    openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.pem && \
+    rm server.csr && cat server.key server.pem >stunnel.pem && rm server.key && rm server.pem
 
 RUN mkdir -p /var/stunnel
 

@@ -3,7 +3,7 @@ version: '3'
 services:
   spamassassin:
     build: spamassassin
-    image: vmail-spamassassin:1.6
+    image: vmail-spamassassin:1.7
     volumes:
       - postfix-vm-pop3d-tuning:/etc/tuning
     ports:
@@ -17,7 +17,7 @@ services:
       - "10023:10023"
   smtp:
     build: postfix
-    image: vmail-postfix:1.6
+    image: vmail-postfix:1.7
     volumes:
       - postfix-vm-pop3d-etc:/etc/virtual
       - postfix-vm-pop3d-spool:/var/spool/virtual
@@ -29,7 +29,7 @@ services:
       - postgrey
   pop3:
     build: vmpop3d
-    image: vmail-vmpop3d:1.6
+    image: vmail-vmpop3d:1.7
     volumes:
       - postfix-vm-pop3d-etc:/etc/virtual
       - postfix-vm-pop3d-spool:/var/spool/virtual
@@ -37,13 +37,16 @@ services:
       - "110:110"
   stunnel:
     build: stunnel
-    image: vmail-stunnel:1.6
+    image: vmail-stunnel:1.7
     ports:
       - "995:995"
     links:
       - pop3
+    volumes:
+      - postfix-vm-pop3d-etc-persist:/etc/volume
 
 volumes:
   postfix-vm-pop3d-etc:
+  postfix-vm-pop3d-etc-persist:
   postfix-vm-pop3d-spool:
   postfix-vm-pop3d-tuning:

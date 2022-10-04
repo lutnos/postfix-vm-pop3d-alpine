@@ -124,6 +124,8 @@ Resources:
           - - |
               #!/bin/bash -xe
             - |
+              yum update -y
+            - |
               yum install docker git -y
             - |
               sudo systemctl start docker.service
@@ -142,7 +144,7 @@ Resources:
             - |
               cd postfix-vm-pop3d-alpine
             - |
-              git checkout 2020
+              git checkout 2022
             - |
               sudo /usr/local/bin/docker-compose build
             - |
@@ -155,19 +157,19 @@ Resources:
               sleep 10
             - >
               sudo docker update --restart unless-stopped
-              postfix-vm-pop3d-alpine_smtp_1
+              postfix-vm-pop3d-alpine-smtp-1
             - >
               sudo docker update --restart unless-stopped
-              postfix-vm-pop3d-alpine_stunnel_1
+              postfix-vm-pop3d-alpine-stunnel-1
             - >
               sudo docker update --restart unless-stopped
-              postfix-vm-pop3d-alpine_spamassassin_1
+              postfix-vm-pop3d-alpine-spamassassin-1
             - >
               sudo docker update --restart unless-stopped
-              postfix-vm-pop3d-alpine_vmpop3d_1
+              postfix-vm-pop3d-alpine-pop3-1
             - >
               sudo docker update --restart unless-stopped
-              postfix-vm-pop3d-alpine_postgrey_1
+              postfix-vm-pop3d-alpine-postgrey-1
             - |
               sudo reboot
 Outputs:
