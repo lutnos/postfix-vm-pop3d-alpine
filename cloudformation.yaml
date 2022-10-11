@@ -144,7 +144,7 @@ Resources:
             - |
               cd postfix-vm-pop3d-alpine
             - |
-              git checkout 2020
+              git checkout 2020cp
             - |
               sudo /usr/local/bin/docker-compose build
             - |

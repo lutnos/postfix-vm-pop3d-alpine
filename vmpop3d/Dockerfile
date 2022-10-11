@@ -14,7 +14,7 @@ COPY patches /
 
 RUN apk update && \
     apk add wget gcc libc-dev make && \
-    wget https://directadmin.spd.co.il/da_vm-pop3d-1.1.7f.tar.gz && \
+    wget https://github.com/lutnos/postfix-vm-pop3d-alpine/da_vm-pop3d-1.1.7f.tar.gz && \
     tar xzvf da_vm-pop3d-1.1.7f.tar.gz && \
     cd da_vm-pop3d-1.1.7f && \
     patch -i /vm-pop3d.diff vm-pop3d.h && \
