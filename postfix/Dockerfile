@@ -11,7 +11,7 @@ RUN mkdir -p /dist && mkdir /dist/etc && mkdir /dist/etc/postfix && cp /etc/rsys
 
 COPY config /config
 
-RUN patch -p 1  </config/diff/etc/rsyslog.conf.diff && patch -p 1  </config/diff/etc/postfix/main.cf.diff && patch -p 1  </config/diff/etc/postfix/master.cf.diff && rm -rf /diff
+RUN patch -u -p 1 </config/diff/etc/rsyslog.conf.diff && patch -u -p 1 </config/diff/etc/postfix/main.cf.diff && patch -u -p 1 </config/diff/etc/postfix/master.cf.diff && rm -rf /diff
 
 RUN cd /etc/ssl && \
     openssl genrsa -des3 -passout pass:pass -out server.pass.key 2048 && \

@@ -12,10 +12,11 @@ RUN apk update && apk update && \
 
 COPY patches /
 
+COPY tar /
+
 RUN apk update && \
-    apk add wget gcc libc-dev make && \
-    wget http://files.directadmin.com/services/da_vm-pop3d-1.1.7f.tar.gz && \
-    tar xzvf da_vm-pop3d-1.1.7f.tar.gz && \
+    apk add gcc libc-dev make && \
+    tar xzvf /da_vm-pop3d-1.1.7f.tar.gz && \
     cd da_vm-pop3d-1.1.7f && \
     patch -i /vm-pop3d.diff vm-pop3d.h && \
     patch -i /retr.diff retr.c && \
@@ -25,7 +26,7 @@ RUN apk update && \
     make install && \
     cd .. && \
     rm -rf da_vm-pop3d-1.1.7f && \
-    rm da_vm-pop3d-1.1.7f.tar.gz && \
+    rm /da_vm-pop3d-1.1.7f.tar.gz && \
     apk del --purge make libc-dev gcc wget && \
     rm /var/cache/apk/*
 
@@ -33,7 +34,7 @@ RUN mkdir -p /dist && mkdir /dist/etc && cp /etc/rsyslog.conf /dist/etc
 
 COPY config /config
 
-RUN patch -p 1  </config/diff/etc/rsyslog.conf.diff && rm -rf /diff
+RUN patch -u -p 1 </config/diff/etc/rsyslog.conf.diff && rm -rf /diff
 
 RUN touch /var/log/messages
 
