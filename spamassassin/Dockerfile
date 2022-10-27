@@ -3,7 +3,7 @@ FROM alpine:3.16
 MAINTAINER Dave English <dave@lutnos.com>
 
 RUN apk update && apk upgrade && \
-    apk add rsyslog spamassassin spamassassin-compiler razor curl patch
+    apk add rsyslog spamassassin spamassassin-compiler razor curl gpg-agent patch
 
 RUN adduser -D spamd
 
