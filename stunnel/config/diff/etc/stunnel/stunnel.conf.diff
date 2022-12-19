@@ -21,11 +21,11 @@
  
  # Some performance tunings
  socket = l:TCP_NODELAY=1
-@@ -37,15 +41,21 @@
+@@ -37,15 +41,23 @@
  # Some debugging stuff useful for troubleshooting
  #debug = 7
  #output = stunnel.log
-+debug = 6
++debug = 7
 +output = /stunnel.log
  
  # Use it for client mode
@@ -41,6 +41,8 @@
 +[pop3s]
 +accept = 0.0.0.0:995
 +connect = pop3:110
++verifyPeer = no
++#CAfile = /etc/stunnel/clients.pem
  
  #[imaps]
  #accept  = 993
