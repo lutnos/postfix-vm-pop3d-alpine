@@ -12,7 +12,7 @@ RUN mkdir -p /dist && mkdir /dist/etc && cp /etc/rsyslog.conf /dist/etc
 
 COPY config /config
 
-RUN patch -p 1  </config/diff/etc/rsyslog.conf.diff && rm -rf /diff
+RUN patch -u -p 1 </config/diff/etc/rsyslog.conf.diff && rm -rf /diff
 
 RUN touch /var/log/messages
 

@@ -9,7 +9,7 @@ RUN mkdir -p /dist && mkdir /dist/etc && mkdir /dist/etc/stunnel && cp /etc/stun
 
 COPY config /config
 
-RUN patch -p 1  </config/diff/etc/stunnel/stunnel.conf.diff && rm -rf /diff
+RUN patch -u -p 1 </config/diff/etc/stunnel/stunnel.conf.diff && rm -rf /diff
 
 RUN cd /etc/ssl && \
     openssl genrsa -des3 -passout pass:pass -out server.pass.key 2048 && \
