@@ -4,8 +4,8 @@
  # Certificate/key is needed in server mode and optional in client mode
  # cert = /etc/stunnel/stunnel.pem
  # key = /etc/stunnel/stunnel.pem
-+cert = /etc/ssl/certs/server.pem
-+key = /etc/ssl/private/server.key
++cert = /etc/stunnel/stunnel.pem
++key = /etc/stunnel/stunnel.pem
  
  # Some security enhancements for UNIX systems - comment them out on Win32
  # chroot = /chroot/stunnel/
