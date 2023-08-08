@@ -63,8 +63,9 @@
 +#readme_directory = /usr/share/doc/postfix/readme
 +readme_directory = no
  inet_protocols = ipv4
+-meta_directory = /etc/postfix
  shlib_directory = /usr/lib/postfix
- meta_directory = /etc/postfix
++meta_directory = /etc/postfix
 +
 +virtual_mailbox_base = /var/spool/virtual
 +virtual_mailbox_maps = lmdb:/etc/virtual/vmailbox
