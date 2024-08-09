@@ -1,4 +1,4 @@
-FROM alpine:3.18.3
+FROM alpine:3.20.2
 
 MAINTAINER Dave English <dave@lutnos.com>
 

@@ -1,4 +1,4 @@
-FROM alpine:3.18.3
+FROM alpine:3.20.2
 
 MAINTAINER Dave English <dave@lutnos.com>
 
@@ -22,7 +22,7 @@ RUN apk update && \
     patch -i /retr.diff retr.c && \
     patch -i /dele.diff dele.c && \
     rm /*.diff && \
-    ./configure --enable-virtual --prefix=/usr CFLAGS="-fcommon" && \
+    ./configure --enable-virtual --prefix=/usr CFLAGS="-fcommon" --build=arm-linux && \
     make install && \
     cd .. && \
     rm -rf da_vm-pop3d-1.1.7f && \
