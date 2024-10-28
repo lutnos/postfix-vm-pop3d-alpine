@@ -9,9 +9,9 @@ Parameters:
   InstanceType:
     Description: EC2 instance type
     Type: String
-    Default: t2.micro
+    Default: t3.micro
     AllowedValues:
-      - t2.micro
+      - t3.micro
     ConstraintDescription: must be a valid EC2 instance type
   clientLocation:
     Description: The IP address range that can be used access the EC2 instance
@@ -104,7 +104,7 @@ Resources:
       SubnetId: !Ref mySubnet
       SecurityGroupIds:
         - !Ref mySecurityGroup
-      ImageId: ami-07ffe1e45b5441531
+      ImageId: ami-06b21ccaeff8cd686
       UserData: !Base64
         'Fn::Join':
           - ''
