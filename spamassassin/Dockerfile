@@ -1,6 +1,6 @@
 FROM alpine:3.19.3
 
-MAINTAINER Dave English <dave@lutnos.com>
+LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
 RUN apk update && apk upgrade && \
     apk add rsyslog spamassassin spamassassin-compiler razor curl gpg-agent patch

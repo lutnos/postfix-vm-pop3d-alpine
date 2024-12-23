@@ -1,6 +1,6 @@
-FROM alpine:3.20.2
+FROM alpine:3.21.0
 
-MAINTAINER Dave English <dave@lutnos.com>
+LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
 RUN apk update && apk update && \
     apk add postfix rsyslog openssl spamassassin-client patch
