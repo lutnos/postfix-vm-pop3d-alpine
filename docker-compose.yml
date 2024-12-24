@@ -1,7 +1,7 @@
 services:
   spamassassin:
     build: spamassassin
-    image: vmail-spamassassin:1.7
+    image: vmail-spamassassin:1.8
     volumes:
       - postfix-vm-pop3d-tuning:/etc/tuning
     ports:
