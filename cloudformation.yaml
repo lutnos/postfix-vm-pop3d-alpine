@@ -133,7 +133,7 @@ Resources:
             - |
               cd postfix-vm-pop3d-alpine
             - |
-              git checkout 2023B
+              git checkout 2024-12
             - |
               sudo /usr/local/bin/docker-compose build
             - |
