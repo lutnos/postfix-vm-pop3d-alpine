@@ -55,8 +55,7 @@
  # PARALLEL DELIVERY TO THE SAME DESTINATION
  #
  # How many parallel deliveries to the same user or domain? With local
-@@ -681,7 +693,52 @@
- 
+@@ -682,6 +694,52 @@
  # readme_directory: The location of the Postfix README files.
  #
 -readme_directory = /usr/share/doc/postfix/readme
