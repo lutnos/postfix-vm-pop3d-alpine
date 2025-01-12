@@ -4,7 +4,7 @@
  #
  #myhostname = host.domain.tld
  #myhostname = virtual.domain.tld
-+myhostname=localhost
++myhostname = localhost
  
  # The mydomain parameter specifies the local internet domain name.
  # The default is to use $myhostname minus the first component.
@@ -58,12 +58,12 @@
 @@ -682,6 +694,52 @@
  # readme_directory: The location of the Postfix README files.
  #
--readme_directory = /usr/share/doc/postfix/readme
-+#readme_directory = /usr/share/doc/postfix/readme
+ readme_directory = /usr/share/doc/postfix/readme
 +readme_directory = no
  inet_protocols = ipv4
- meta_directory = /etc/postfix
  shlib_directory = /usr/lib/postfix
+ meta_directory = /etc/postfix
++
 +
 +virtual_mailbox_base = /var/spool/virtual
 +virtual_mailbox_maps = lmdb:/etc/virtual/vmailbox

@@ -36,9 +36,9 @@ RUN apk add wget gcc libc-dev perl-dev db-dev make && \
     cd .. && \
     rm -rf postgrey-1.37 && \
     rm postgrey-1.37.tar.gz && \
-    mv /usr/lib/libdb-5.2.so / && \
+    mv /usr/lib/libdb-5.*.so / && \
     apk del --purge make perl-dev db-dev libc-dev gcc wget && \
-    mv /libdb-5.2.so /usr/lib && \
+    mv /libdb-5.*.so /usr/lib && \
     rm /var/cache/apk/*
 
 RUN mkdir /etc/volume && mv /etc/postfix/postgrey_whitelist_clients /etc/volume && \
