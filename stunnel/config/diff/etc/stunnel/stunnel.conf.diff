@@ -25,7 +25,7 @@
  # Some debugging stuff useful for troubleshooting
  #debug = 7
  #output = stunnel.log
-+debug = 7
++debug = 5
 +output = /stunnel.log
  
  # Use it for client mode
