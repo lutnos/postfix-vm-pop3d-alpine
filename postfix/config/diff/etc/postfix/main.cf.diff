@@ -55,15 +55,16 @@
  # PARALLEL DELIVERY TO THE SAME DESTINATION
  #
  # How many parallel deliveries to the same user or domain? With local
-@@ -682,6 +694,52 @@
+@@ -681,7 +693,52 @@
+ 
  # readme_directory: The location of the Postfix README files.
  #
- readme_directory = /usr/share/doc/postfix/readme
+-readme_directory = /usr/share/doc/postfix/readme
++#readme_directory = /usr/share/doc/postfix/readme
 +readme_directory = no
  inet_protocols = ipv4
- shlib_directory = /usr/lib/postfix
  meta_directory = /etc/postfix
-+
+ shlib_directory = /usr/lib/postfix
 +
 +virtual_mailbox_base = /var/spool/virtual
 +virtual_mailbox_maps = lmdb:/etc/virtual/vmailbox

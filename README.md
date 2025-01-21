@@ -88,7 +88,7 @@ To export the new distribution files, for example for postgrey
 docker compose build postgrey
 mkdir -p postgrey/config/tmp/dist
 docker compose run --entrypoint /export.sh postgrey |base64 -d |tar x -C postgrey/config/tmp/dist
-cp -r postgrey/config/tmp/dist postgrey/config/tmp/new
+cp -r postgrey/config/tmp/dist/ postgrey/config/tmp/new
 ```
 
 update the files in tmp/new
