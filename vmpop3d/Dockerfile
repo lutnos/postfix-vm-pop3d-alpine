@@ -1,4 +1,4 @@
-FROM alpine:3.21.0
+FROM alpine:3.22.0
 
 LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
@@ -27,7 +27,7 @@ RUN apk update && \
     cd .. && \
     rm -rf da_vm-pop3d-1.1.7f && \
     rm da_vm-pop3d-1.1.7f.tar.gz && \
-    apk del --purge make libc-dev gcc wget && \
+    apk del --purge make libc-dev gcc && \
     rm /var/cache/apk/*
 
 RUN mkdir -p /dist && mkdir /dist/etc && cp /etc/rsyslog.conf /dist/etc

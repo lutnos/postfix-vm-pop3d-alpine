@@ -1,4 +1,4 @@
-FROM alpine:3.21.0
+FROM alpine:3.22.0
 
 LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
