@@ -7,7 +7,7 @@ RUN addgroup -g 600 postdrop && \
     adduser -D -u 500 -G postdrop -g vmail -h /var/spool/virtual -s /sbin/nologin vmail && \
     chown vmail:postdrop /var/spool/virtual
 
-RUN apk update && apk update && \
+RUN apk update && apk upgrade && \
     apk add apache2-utils rsyslog patch
 
 COPY patches /

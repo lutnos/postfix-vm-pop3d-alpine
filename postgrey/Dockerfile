@@ -2,7 +2,7 @@ FROM alpine:3.22.0
 
 LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
-RUN apk update && apk update && \
+RUN apk update && apk upgrade && \
     apk add rsyslog perl perl-net-dns perl-net-server perl-io-multiplex perl-net-rblclient perl-parse-syslog perl-netaddr-ip patch
 
 RUN apk add wget gcc libc-dev perl-dev db-dev make && \

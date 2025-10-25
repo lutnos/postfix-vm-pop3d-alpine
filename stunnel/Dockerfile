@@ -2,7 +2,7 @@ FROM alpine:3.22.0
 
 LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
-RUN apk update && apk update && \
+RUN apk update && apk upgrade && \
     apk add openssl stunnel patch
 
 RUN mkdir -p /dist && mkdir /dist/etc && mkdir /dist/etc/stunnel && cp /etc/stunnel/stunnel.conf /dist/etc/stunnel

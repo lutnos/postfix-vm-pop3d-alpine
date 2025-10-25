@@ -2,7 +2,7 @@ FROM alpine:3.22.0
 
 LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
-RUN apk update && apk update && \
+RUN apk update && apk upgrade && \
     apk add postfix rsyslog openssl spamassassin-client patch
 
 RUN adduser -D -H spamc
