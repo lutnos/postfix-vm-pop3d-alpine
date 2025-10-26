@@ -9,9 +9,9 @@ Parameters:
   InstanceType:
     Description: EC2 instance type
     Type: String
-    Default: t3.micro
+    Default: t4g.micro
     AllowedValues:
-      - t3.micro
+      - t4g.micro
     ConstraintDescription: must be a valid EC2 instance type
   clientLocation:
     Description: The IP address range that can be used access the EC2 instance
@@ -38,6 +38,7 @@ Resources:
     Properties:
       VpcId: !Ref myVPC
       CidrBlock: 10.0.0.0/28
+      AvailabilityZone: us-east-1c
       MapPublicIpOnLaunch: true
   myRouteTable:
     Type: 'AWS::EC2::RouteTable'
@@ -104,26 +105,32 @@ Resources:
       SubnetId: !Ref mySubnet
       SecurityGroupIds:
         - !Ref mySecurityGroup
-      ImageId: ami-06b21ccaeff8cd686
+      ImageId: ami-0e6f2174f7905500d
       UserData: !Base64
         'Fn::Join':
           - ''
           - - |
               #!/bin/bash -xe
             - |
-              dnf --releasever=latest update -y
+              sudo dnf --releasever=latest update -y
             - |
-              dnf install docker git -y
+              sudo dnf install docker git -y
             - |
               sudo systemctl start docker.service
             - |
               sudo chkconfig docker on
             - >+
-              sudo curl -L
-              https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname
-              -s)-$(uname -m) -o /usr/local/bin/docker-compose
+              sudo curl
+              -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)
+              -o /usr/libexec/docker/cli-plugins/docker-compose
             - |
-              sudo chmod +x /usr/local/bin/docker-compose
+              sudo chmod +x /usr/libexec/docker/cli-plugins/docker-compose
+            - >+
+              sudo curl
+              sL https://github.com/docker/compose/releases/latest/download/docker-buildx-linux-"$(uname -m)"
+              -o /usr/libexec/docker/cli-plugins/docker-buildx
+            - |
+              sudo chmod +x /usr/libexec/docker/cli-plugins/docker-buildx
             - |
               sudo usermod -a -G docker ec2-user
             - |
@@ -135,9 +142,9 @@ Resources:
             - |
               git checkout 2024-12
             - |
-              sudo /usr/local/bin/docker-compose build
+              sudo docker compose build
             - |
-              sudo /usr/local/bin/docker-compose up &
+              sudo docker compose up &
             - |
               sleep 10
             - >
