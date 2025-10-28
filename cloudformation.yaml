@@ -4,7 +4,7 @@ Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: 'AWS::EC2::KeyPair::KeyName'
-    Default: s25-u
+    Default: s25u
     ConstraintDescription: must be the name of an existing EC2 KeyPair
   InstanceType:
     Description: EC2 instance type
