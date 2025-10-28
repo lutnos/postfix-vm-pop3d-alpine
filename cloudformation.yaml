@@ -4,7 +4,7 @@ Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: 'AWS::EC2::KeyPair::KeyName'
-    Default: test1
+    Default: s25-u
     ConstraintDescription: must be the name of an existing EC2 KeyPair
   InstanceType:
     Description: EC2 instance type
@@ -118,7 +118,7 @@ Resources:
             - |
               sudo systemctl start docker.service
             - |
-              sudo chkconfig docker on
+              sudo systemctl enable docker.service
             - >+
               sudo curl
               -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)
@@ -127,7 +127,7 @@ Resources:
               sudo chmod +x /usr/libexec/docker/cli-plugins/docker-compose
             - >+
               sudo curl
-              sL https://github.com/docker/buildx/releases/latest/download/buildx-linux-amd64
+              -sL https://github.com/docker/buildx/releases/download/v0.29.1/buildx-v0.29.1.linux-amd64
               -o /usr/libexec/docker/cli-plugins/docker-buildx
             - |
               sudo chmod +x /usr/libexec/docker/cli-plugins/docker-buildx
