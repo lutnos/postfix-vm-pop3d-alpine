@@ -15,7 +15,8 @@ COPY patches /
 COPY tar /
 
 RUN apk update && \
-    apk add gcc libc-dev make && \
+    apk add wget gcc libc-dev make && \
+    wget http://files.directadmin.com/services/da_vm-pop3d-1.1.7f.tar.gz && \
     tar xzvf /da_vm-pop3d-1.1.7f.tar.gz && \
     cd da_vm-pop3d-1.1.7f && \
     patch -i /vm-pop3d.diff vm-pop3d.h && \
@@ -27,7 +28,7 @@ RUN apk update && \
     cd .. && \
     rm -rf da_vm-pop3d-1.1.7f && \
     rm da_vm-pop3d-1.1.7f.tar.gz && \
-    apk del --purge make libc-dev gcc && \
+    apk del --purge make libc-dev gcc wget && \
     rm /var/cache/apk/*
 
 RUN mkdir -p /dist && mkdir /dist/etc && cp /etc/rsyslog.conf /dist/etc
