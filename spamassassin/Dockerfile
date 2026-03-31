@@ -14,7 +14,7 @@ COPY config /config
 RUN patch -u -p 1 </config/diff/etc/rsyslog.conf.diff && patch -u -p 1 </config/diff/etc/mail/spamassassin/local.cf.diff && patch -u -p 1 </config/diff/etc/mail/spamassassin/v320.pre.diff && mkdir /etc/volume && mv /etc/mail/spamassassin/local.cf /etc/volume
 
 # RUN /usr/bin/sa-update
-RUN /usr/bin/sa-compile
+# RUN /usr/bin/sa-compile
 
 RUN touch /var/log/messages
 

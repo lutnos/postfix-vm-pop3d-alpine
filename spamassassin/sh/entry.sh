@@ -4,6 +4,7 @@ if [ -f /var/run/rsyslogd.pid ]; then rm /var/run/rsyslogd.pid; fi
 /usr/sbin/rsyslogd -n &
 
 # /usr/bin/sa-update --verbose
+# /usr/bin/sa-compile
 
 if [ -f /var/run/spamd.pid ]; then rm /var/run/spamd.pid; fi
 
