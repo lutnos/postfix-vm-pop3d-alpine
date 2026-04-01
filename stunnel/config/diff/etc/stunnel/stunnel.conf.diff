@@ -5,7 +5,7 @@
  # cert = /etc/stunnel/stunnel.pem
  # key = /etc/stunnel/stunnel.pem
 +cert = /etc/stunnel/stunnel.pem
-+key = /etc/stunnel/stunnel.pem
++key = /etc/stunnel/stunnel.key
  
  # Some security enhancements for UNIX systems - comment them out on Win32
  # chroot = /chroot/stunnel/

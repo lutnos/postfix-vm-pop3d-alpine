@@ -7,6 +7,4 @@ RUN apk update && apk upgrade
 COPY sh /
 RUN chmod +x /*.sh
 
-VOLUME /usr
-
 ENTRYPOINT ["/entry.sh"]

@@ -46,8 +46,6 @@ services:
   debug:
     build: debug
     image: vmail-debug:1.1
-    volumes:
-      - postfix-vm-pop3d-debug-usr:/usr
 
 volumes:
   postfix-vm-pop3d-etc:
@@ -55,4 +53,3 @@ volumes:
   postfix-vm-pop3d-spool:
   postfix-vm-pop3d-tuning:
   postfix-vm-pop3d-var-stunnel-persist:
-  postfix-vm-pop3d-debug-usr:
