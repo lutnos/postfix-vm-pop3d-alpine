@@ -42,9 +42,11 @@ services:
       - pop3
     volumes:
       - postfix-vm-pop3d-etc-persist:/etc/volume
-
+      - postfix-vm-pop3d-var-stunnel-persist:/var/stunnel
 volumes:
   postfix-vm-pop3d-etc:
   postfix-vm-pop3d-etc-persist:
   postfix-vm-pop3d-spool:
   postfix-vm-pop3d-tuning:
+  postfix-vm-pop3d-etc-persist:
+  postfix-vm-pop3d-var-stunnel-persist:

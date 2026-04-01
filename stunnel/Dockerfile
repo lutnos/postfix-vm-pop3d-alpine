@@ -1,15 +1,24 @@
-FROM alpine:3.23.0
+FROM alpine:3.23.0 AS build
 
 LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
 RUN apk update && apk upgrade && \
-    apk add openssl stunnel patch
+    apk add gcc libc-dev make autoconf openssl stunnel patch
 
-RUN mkdir -p /dist && mkdir /dist/etc && mkdir /dist/etc/stunnel && cp /etc/stunnel/stunnel.conf /dist/etc/stunnel
+COPY src /src
+
+RUN cd /src && \
+    autoconf && \
+    ./configure --prefix=/usr CFLAGS="-fcommon" --build=arm-linux && \
+    make install
+
+RUN mkdir -p /dist/etc/stunnel && cp /etc/stunnel/stunnel.conf /dist/etc/stunnel
 
 COPY config /config
 
-RUN patch -u -p 1 </config/diff/etc/stunnel/stunnel.conf.diff && rm -rf /diff && mkdir /etc/entry && mv /etc/stunnel/* /etc/entry && rmdir /etc/stunnel
+RUN patch -u -p 1 </config/diff/etc/stunnel/stunnel.conf.diff \
+#     \
+#    && rm -rf /diff && mkdir /etc/entry && mv /etc/stunnel/* /etc/entry && rmdir /etc/stunnel
 
 RUN cd /etc/entry && \
     openssl genrsa -des3 -passout pass:pass -out server.pass.key 2048 && \
@@ -22,9 +31,19 @@ RUN cd /etc/entry && \
 
 RUN mkdir -p /var/stunnel
 
-COPY sh /
-RUN chmod +x /*.sh
+FROM scratch
+COPY --from=build /usr/bin/stunnel /usr/bin/
+COPY --from=build /lib/ld-musl-aarch64.so.1 /lib/
+COPY --from=build /usr/lib/libssl.so.3 /usr/lib/
+COPY --from=build /usr/lib/libcrypto.so.3 /usr/lib/
+COPY --from=build /etc/stunnel/server.pem /etc/stunnel/stunnel.conf /etc/stunnel/
+COPY --from=build /usr/bin/execwait /usr/bin/
+# only when calculating new configuration diff:
+COPY --from=build /dist /dist/
+
+VOLUME /etc/stunnel
+VOLUME /var/stunnel
 
 EXPOSE 995
 
-ENTRYPOINT ["/entry.sh"]
+ENTRYPOINT ["/usr/bin/execwait"]
