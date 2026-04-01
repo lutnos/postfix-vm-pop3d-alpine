@@ -1,0 +1,70 @@
+# execwait
+
+#### Start of system configuration section. ####
+
+VPATH = @srcdir@
+srcdir = @srcdir@
+
+CC = @CC@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+DEFS = @DEFS@
+LIBS = @LIBS@
+LIBOBJS = @LIBOBJS@
+
+## doesn't compile with followimg -ansi option under BSD/OS
+CFLAGS = @CFLAGS@ -O3 -W -Wall @EXTRA_CFLAGS@
+LDFLAGS =
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+sysconfdir = @sysconfdir@
+bindir = @bindir@
+
+# Prefix to be prepended to each installed program, normally empty or `g'.
+binprefix = 
+
+#### End of system configuration section. ####
+
+SHELL = /bin/sh
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+SRCS = execwait.c
+OBJS = $(LIBOBJS) execwait.o
+HDRS =
+
+all: execwait
+
+.PHONY: all
+
+.c.o:
+	$(CC) -c $(CPPFLAGS) $(DEFS) $(CFLAGS) $<
+
+.PHONY: install installdirs
+
+install: installdirs execwait
+	$(INSTALL_PROGRAM) execwait $(ROOT)$(bindir)/$(binprefix)execwait
+
+installdirs:
+	$(srcdir)/mkinstalldirs $(ROOT)$(bindir)
+
+execwait: $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+
+Makefile: Makefile.in config.status
+	$(SHELL) config.status
+
+config.status: configure
+	$(srcdir)/configure --no-create
+
+.PHONY: clean
+
+clean:
+	rm -f execwait *.o core
+
+# Prevent GNU make v3 from overflowing arg limit on SysV.
+.NOEXPORT:

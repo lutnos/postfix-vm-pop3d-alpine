@@ -1,8 +1,8 @@
-FROM alpine:3.23.0 AS build
+FROM alpine:3.22.0 AS build
 
 LABEL org.opencontainers.image.authors="Dave English <dave@lutnos.com>"
 
-RUN apk update && apk upgrade && \
+RUN apk update && apk update && \
     apk add gcc libc-dev make autoconf openssl stunnel patch
 
 COPY src /src
@@ -16,18 +16,14 @@ RUN mkdir -p /dist/etc/stunnel && cp /etc/stunnel/stunnel.conf /dist/etc/stunnel
 
 COPY config /config
 
-RUN patch -u -p 1 </config/diff/etc/stunnel/stunnel.conf.diff \
-#     \
-#    && rm -rf /diff && mkdir /etc/entry && mv /etc/stunnel/* /etc/entry && rmdir /etc/stunnel
+RUN patch -u -p 1 </config/diff/etc/stunnel/stunnel.conf.diff
 
-RUN cd /etc/entry && \
+RUN cd /etc/stunnel && \
     openssl genrsa -des3 -passout pass:pass -out server.pass.key 2048 && \
     openssl rsa -passin pass:pass -in server.pass.key -out server.key && \
-    rm server.pass.key && \
     openssl req -new -key server.key -nodes -out server.csr \
             -subj "/CN=mail.lutnos.com" && \
-    openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.pem && \
-    rm server.csr && cat server.key server.pem >stunnel.pem && rm server.key && rm server.pem
+    openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.pem
 
 RUN mkdir -p /var/stunnel
 
